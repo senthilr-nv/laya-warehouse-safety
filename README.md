@@ -32,6 +32,10 @@ Each model invocation evaluates these outputs in parallel:
 The controller applies Laya's selected action. Keeping all actions in one normalized choice avoids
 comparing probabilities from separately phrased binary questions.
 
+The current domain training and evaluation cover only the `action` output. The replay preserves
+the other three outputs to demonstrate Laya's typed interface, but labels them as unvalidated
+diagnostics. Do not interpret them as calibrated warehouse risk or escalation signals.
+
 Generic Laya checkpoints are useful baselines, but they are not warehouse policies. The repository
 therefore generates its own balanced training states and provides a small domain fine-tuning path.
 No external package, incident, or robotics dataset is required.
@@ -92,7 +96,8 @@ The recorder refuses to overwrite an existing result. Choose a new output path f
 
 Clone the repository and open [`demo/index.html`](demo/index.html) in a browser. The self-contained
 viewer replays the verified DGX Spark episode without a server. It shows the warehouse state,
-requested and applied actions, action probabilities, latency, and every safety override by tick.
+requested and applied actions, the four typed outputs from one forward pass, latency, motion
+forecasts, and every safety override by tick. Only the action distribution is domain-trained.
 
 The included record is data, not a scripted animation. Use the controls or arrow keys to inspect
 the proactive pallet detour and the later worker-traffic interventions.
@@ -152,7 +157,9 @@ The included replay was produced from commit `829c16a` on a DGX Spark:
 - The safety shield made three moving-worker interventions and no pallet intervention.
 
 The held-out states come from the same deterministic generator family. These numbers demonstrate
-the software path and domain specialization; they are not evidence of real-world robot safety.
+the software path and action specialization; they are not evidence of real-world robot safety.
+The three shield interventions also show that perfect accuracy on this generated action split does
+not imply a shield-free episode or a generally safe policy.
 
 ## Current milestone
 
