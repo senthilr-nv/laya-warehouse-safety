@@ -166,6 +166,7 @@ def run_benchmark(
     specs: tuple[ScenarioSpec, ...] | None = None,
     max_ticks: int = 40,
     model_load_ms: dict[str, float] | None = None,
+    evaluation_role: str = "final",
 ) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     """Run every controller over the same manifests with and without the shield."""
 
@@ -246,6 +247,7 @@ def run_benchmark(
     scenario_counts = Counter(spec.family.value for spec in specs)
     deterministic_payload = {
         "configuration": {
+            "evaluation_role": evaluation_role,
             "max_ticks": max_ticks,
             "tracks": ["policy_only", "layered"],
             "path_blocked_horizon": PATH_BLOCKED_HORIZON,
@@ -263,6 +265,7 @@ def run_benchmark(
     report = {
         "report_schema_version": REPORT_SCHEMA_VERSION,
         "benchmark": "warehouse-compositional-ood-v1",
+        "evaluation_role": evaluation_role,
         "training_families": ["stationary_pallet", "crossing_worker"],
         "held_out_family": "combined_pallet_worker",
         **deterministic_payload,

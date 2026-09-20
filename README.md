@@ -107,24 +107,29 @@ the proactive pallet detour and the later worker-traffic interventions.
 
 ## Frozen scenarios and policy data
 
-Version 1 has three immutable scenario families:
+Manifest version 2 has three immutable scenario families and two evaluation roles:
 
-| Family | Training | Validation | IID test | Compositional OOD test |
+| Family | Training | Validation | Development | Frozen final |
 |---|---:|---:|---:|---:|
-| Stationary pallet | 20 | 6 | 8 | 0 |
-| Crossing worker | 20 | 6 | 8 | 0 |
-| Combined pallet and worker | 0 | 0 | 0 | 16 |
+| Stationary pallet | 20 | 6 | 8 IID | 8 IID |
+| Crossing worker | 20 | 6 | 8 IID | 8 IID |
+| Combined pallet and worker | 0 | 0 | 16 OOD | 16 OOD |
 
-The combined family is never used for training or checkpoint selection. It is held out entirely to
-measure whether behavior learned from the two single-hazard families composes.
+The combined family is never used for training or checkpoint selection. The development manifest
+was used while correcting label weighting and choosing the epoch budget, so its model results are
+development evidence—not an untouched generalization result. The final manifest was frozen
+afterward with disjoint scenario IDs and hazard rows absent from the development set; its digest is
+pinned in tests before any final model execution.
 
 `make-dataset` rolls the deterministic oracle through one named split. Each JSONL row contains a
 raw simulator observation plus separate `action` and `path_blocked` labels. Model observations do
 not contain candidate safety, oracle actions, shield decisions, or labels.
 
-Training keeps every generated row and applies inverse-frequency loss weights per question and
-label. This prevents the many clear-path `advance` states from overwhelming rarer detour and wait
-decisions without changing the validation or benchmark distributions.
+Training keeps every generated row, adds its horizontal mirror with freshly computed oracle labels,
+and applies inverse-frequency loss weights per question and label. Mirroring exposes reflected
+layouts; weighting gives every label equal total loss weight. This prevents the many clear-path
+`advance` states from overwhelming rarer detour and wait decisions without changing the validation
+or benchmark distributions.
 
 The oracle finds the shortest collision-free route. Equal-length routes minimize lateral moves,
 then waits, then use this fixed action order: advance, shift left, shift right, wait. The
@@ -140,7 +145,8 @@ laya-warehouse make-dataset --split validation --output results/validation.jsonl
 ## Reproducible benchmark
 
 The benchmark runs fine-tuned Laya, the deterministic heuristic, and a seeded-random policy over
-the same IID and compositional OOD manifests. Every controller is measured twice:
+the same IID and compositional OOD manifest. By default it selects the frozen final manifest. Every
+controller is measured twice:
 
 - `policy_only` disables collision shielding while retaining the grid boundary guard.
 - `layered` enables the deterministic collision shield.
@@ -164,6 +170,9 @@ python scripts/run_benchmark.py \
 The report contains a manifest digest and a deterministic result digest. Runtime measurements are
 reported separately and are excluded from the deterministic digest.
 
+To reproduce the earlier tuning evidence instead, pass `--manifest-role development`. Never report
+that manifest as an untouched final test.
+
 ### DGX Spark container
 
 The container preserves NVIDIA's ARM64/Blackwell PyTorch build from the pinned NGC base image. It
@@ -181,7 +190,7 @@ Fine-tune the smaller Laya checkpoint on generated states, then run the learned 
 
 ```sh
 docker compose run --rm --entrypoint python simulation \
-  scripts/train_laya_policy.py --output /results/laya-warehouse-model
+  scripts/train_laya_policy.py --epochs 8 --output /results/laya-warehouse-model
 
 docker compose run --rm simulation run \
   --controller laya \
@@ -191,9 +200,13 @@ docker compose run --rm simulation run \
   --output /results/laya-finetuned-dgx.json
 ```
 
-Training records baseline and per-epoch validation accuracy for both trained questions in
-`results/laya-warehouse-model/training_metrics.json`. Training, benchmark, and episode commands
-refuse to overwrite prior outputs.
+Training records baseline and per-epoch validation metrics for both trained questions in
+`results/laya-warehouse-model/training_metrics.json`. The action report includes each label's exact
+support, macro accuracy, and minimum label accuracy. Checkpoint selection prioritizes minimum
+per-label action accuracy, then action macro accuracy, `path_blocked` accuracy, and lower Brier
+score. The current validation split has only three examples for each lateral label, so those recall
+values are development signals rather than stable estimates. Training, benchmark, and episode
+commands refuse to overwrite prior outputs.
 
 ## Measured DGX Spark run
 

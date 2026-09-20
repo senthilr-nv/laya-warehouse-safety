@@ -53,7 +53,14 @@ def _parser() -> argparse.ArgumentParser:
     )
     dataset.add_argument(
         "--split",
-        choices=("train", "validation", "iid_test", "ood_test"),
+        choices=(
+            "train",
+            "validation",
+            "iid_test",
+            "ood_test",
+            "final_iid_test",
+            "final_ood_test",
+        ),
         default="train",
     )
     dataset.add_argument("--max-ticks", type=int, default=30)

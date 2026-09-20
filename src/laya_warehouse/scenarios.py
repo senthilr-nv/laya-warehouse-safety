@@ -11,7 +11,7 @@ from typing import Any, Iterable
 from .model import Actor, World
 
 
-MANIFEST_VERSION = 1
+MANIFEST_VERSION = 2
 
 
 class ScenarioFamily(str, Enum):
@@ -80,10 +80,17 @@ def _actor_x_after(*, start_x: int, dx: int, ticks: int, width: int) -> int:
     return actor.x
 
 
-def _crossing_worker(robot_x: int, row: int, variant: int, width: int) -> ActorSpec:
+def _crossing_worker(
+    robot_x: int,
+    row: int,
+    variant: int,
+    width: int,
+    *,
+    robot_y: int = 8,
+) -> ActorSpec:
     """Place a worker so its forecast intersects a straight robot route."""
 
-    arrival_tick = 8 - row
+    arrival_tick = robot_y - row
     direction_order = (1, -1) if variant % 2 == 0 else (-1, 1)
     candidates = range(width) if variant % 3 else range(width - 1, -1, -1)
     for dx in direction_order:
@@ -171,6 +178,85 @@ def _combined_spec(split: str, index: int, variant: int) -> ScenarioSpec:
     )
 
 
+def _final_stationary_spec(index: int, variant: int) -> ScenarioSpec:
+    robot_x = 3 + index % 5
+    pallet_y = (1, 6, 7)[index % 3]
+    return ScenarioSpec(
+        scenario_id=f"stationary-pallet-final_iid_test-{index:03d}",
+        family=ScenarioFamily.STATIONARY_PALLET,
+        split="final_iid_test",
+        width=11,
+        height=9,
+        robot_x=robot_x,
+        robot_y=8,
+        goal_columns=(4, 5, 6),
+        actors=(
+            ActorSpec(
+                actor_id=f"pallet-{variant:03d}",
+                kind="pallet",
+                x=robot_x,
+                y=pallet_y,
+                dx=0,
+            ),
+        ),
+    )
+
+
+def _final_crossing_spec(index: int, variant: int) -> ScenarioSpec:
+    robot_x = 4 + index % 3
+    worker_y = (1, 7)[index % 2]
+    return ScenarioSpec(
+        scenario_id=f"crossing-worker-final_iid_test-{index:03d}",
+        family=ScenarioFamily.CROSSING_WORKER,
+        split="final_iid_test",
+        width=11,
+        height=9,
+        robot_x=robot_x,
+        robot_y=8,
+        goal_columns=(robot_x,),
+        actors=(
+            _crossing_worker(
+                robot_x,
+                worker_y,
+                variant,
+                11,
+            ),
+        ),
+    )
+
+
+def _final_combined_spec(index: int, variant: int) -> ScenarioSpec:
+    robot_x = 3 + index % 5
+    pallet_y = (1, 6, 7)[index % 3]
+    worker_rows = tuple(row for row in (1, 6, 7) if row != pallet_y)
+    worker_y = worker_rows[(index // 3) % 2]
+    return ScenarioSpec(
+        scenario_id=f"combined-pallet-worker-final_ood_test-{index:03d}",
+        family=ScenarioFamily.COMBINED_PALLET_WORKER,
+        split="final_ood_test",
+        width=11,
+        height=9,
+        robot_x=robot_x,
+        robot_y=8,
+        goal_columns=(4, 5, 6),
+        actors=(
+            ActorSpec(
+                actor_id=f"pallet-{variant:03d}",
+                kind="pallet",
+                x=robot_x,
+                y=pallet_y,
+                dx=0,
+            ),
+            _crossing_worker(
+                robot_x,
+                worker_y,
+                variant,
+                11,
+            ),
+        ),
+    )
+
+
 def _build_manifest() -> tuple[ScenarioSpec, ...]:
     split_plan = (
         ("train", 20, (ScenarioFamily.STATIONARY_PALLET, ScenarioFamily.CROSSING_WORKER)),
@@ -191,6 +277,11 @@ def _build_manifest() -> tuple[ScenarioSpec, ...]:
                 else:
                     spec = _combined_spec(split, index, variant)
                 manifest.append(spec)
+    for index in range(8):
+        manifest.append(_final_stationary_spec(index, 400 + index))
+        manifest.append(_final_crossing_spec(index, 500 + index // 2))
+    for index in range(16):
+        manifest.append(_final_combined_spec(index, 600 + index))
     return tuple(manifest)
 
 
@@ -204,8 +295,18 @@ def manifest_for_split(split: str) -> tuple[ScenarioSpec, ...]:
     return specs
 
 
-def benchmark_manifest() -> tuple[ScenarioSpec, ...]:
+def development_manifest() -> tuple[ScenarioSpec, ...]:
     return manifest_for_split("iid_test") + manifest_for_split("ood_test")
+
+
+def final_benchmark_manifest() -> tuple[ScenarioSpec, ...]:
+    return manifest_for_split("final_iid_test") + manifest_for_split("final_ood_test")
+
+
+def benchmark_manifest() -> tuple[ScenarioSpec, ...]:
+    """Return the one-shot final manifest, frozen before model evaluation."""
+
+    return final_benchmark_manifest()
 
 
 def manifest_digest(specs: Iterable[ScenarioSpec] = FROZEN_MANIFEST) -> str:

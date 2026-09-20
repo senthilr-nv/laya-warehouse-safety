@@ -20,7 +20,7 @@ from safetensors.torch import load_file, save_file
 from transformers import AutoTokenizer
 
 from laya_warehouse.controllers import LayaController
-from laya_warehouse.dataset import dataset_summary, generate_cases
+from laya_warehouse.dataset import add_horizontal_mirrors, dataset_summary, generate_cases
 from laya_warehouse.model import Action
 
 
@@ -29,7 +29,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default="convaiinnovations/laya")
     parser.add_argument("--output", type=Path, default=Path("results/laya-warehouse-model"))
     parser.add_argument("--max-ticks", type=int, default=30)
-    parser.add_argument("--epochs", type=int, default=3)
+    parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--encoder-lr", type=float, default=2.5e-5)
     parser.add_argument("--head-lr", type=float, default=1e-4)
@@ -210,15 +210,27 @@ def evaluate(
                 blocked_correct += int((probability_true >= 0.5) == bool(target))
                 blocked_brier += (probability_true - target) ** 2
                 blocked_cases += 1
+    per_label_metrics = {
+        label: {
+            "accuracy": round(sum(values) / len(values), 4),
+            "correct": sum(values),
+            "cases": len(values),
+        }
+        for label, values in sorted(per_label.items())
+        if values
+    }
+    label_accuracies = [metrics["accuracy"] for metrics in per_label_metrics.values()]
     return {
         "action": {
             "accuracy": round(action_correct / action_cases, 4),
             "cases": action_cases,
             "per_label_accuracy": {
-                label: round(sum(values) / len(values), 4)
-                for label, values in sorted(per_label.items())
-                if values
+                label: metrics["accuracy"]
+                for label, metrics in per_label_metrics.items()
             },
+            "per_label": per_label_metrics,
+            "macro_accuracy": round(sum(label_accuracies) / len(label_accuracies), 4),
+            "minimum_label_accuracy": min(label_accuracies),
         },
         "path_blocked": {
             "accuracy": round(blocked_correct / blocked_cases, 4),
@@ -312,8 +324,10 @@ def main() -> int:
     torch.set_float32_matmul_precision("high")
     device = torch.device("cuda")
 
-    train_cases = generate_cases(split="train", max_ticks=args.max_ticks)
+    source_train_cases = generate_cases(split="train", max_ticks=args.max_ticks)
+    train_cases = add_horizontal_mirrors(source_train_cases)
     eval_cases = generate_cases(split="validation", max_ticks=args.max_ticks)
+    print("source train dataset:", dataset_summary(source_train_cases), flush=True)
     print("train dataset:", dataset_summary(train_cases), flush=True)
     print("evaluation dataset:", dataset_summary(eval_cases), flush=True)
 
@@ -353,7 +367,8 @@ def main() -> int:
     scaler = torch.amp.GradScaler("cuda", enabled=dtype == torch.float16)
     rng = random.Random(args.seed)
     epoch_metrics = []
-    best_score = -1.0
+    best_selection: tuple[float, ...] | None = None
+    best_selection_metrics = None
     best_epoch = 0
     best_state = None
     for epoch in range(1, args.epochs + 1):
@@ -379,13 +394,21 @@ def main() -> int:
         epoch_metric = {"epoch": epoch, "loss": round(loss, 5), "evaluation": evaluation}
         epoch_metrics.append(epoch_metric)
         print("epoch:", json.dumps(epoch_metric, sort_keys=True), flush=True)
-        score = (
-            evaluation["action"]["accuracy"]
-            + evaluation["path_blocked"]["accuracy"]
-        ) / 2
-        if score > best_score:
-            best_score = score
+        selection = (
+            evaluation["action"]["minimum_label_accuracy"],
+            evaluation["action"]["macro_accuracy"],
+            evaluation["path_blocked"]["accuracy"],
+            -evaluation["path_blocked"]["brier"],
+        )
+        if best_selection is None or selection > best_selection:
+            best_selection = selection
             best_epoch = epoch
+            best_selection_metrics = {
+                "minimum_action_label_accuracy": selection[0],
+                "action_macro_accuracy": selection[1],
+                "path_blocked_accuracy": selection[2],
+                "path_blocked_brier": -selection[3],
+            }
             best_state = {
                 name: value.detach().half().cpu().clone()
                 for name, value in model.state_dict().items()
@@ -398,12 +421,24 @@ def main() -> int:
     metrics = {
         "base_model": args.model,
         "seed": args.seed,
+        "source_train_dataset": dataset_summary(source_train_cases),
         "train_dataset": dataset_summary(train_cases),
         "evaluation_dataset": dataset_summary(eval_cases),
         "baseline": baseline,
         "epochs": epoch_metrics,
         "best_epoch": best_epoch,
-        "best_validation_score": round(best_score, 4),
+        "best_validation_selection": best_selection_metrics,
+        "checkpoint_selection_order": [
+            "minimum_action_label_accuracy",
+            "action_macro_accuracy",
+            "path_blocked_accuracy",
+            "lowest_path_blocked_brier",
+        ],
+        "validation_support_warning": (
+            "Lateral action labels have three cases each; report them as development evidence, "
+            "not stable recall estimates."
+        ),
+        "training_augmentation": "horizontal mirror",
         "training_loss_weighting": "inverse frequency by question and label",
         "elapsed_seconds": round(time.time() - started, 2),
     }

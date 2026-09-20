@@ -15,6 +15,7 @@ from laya_warehouse.benchmark import (
 )
 from laya_warehouse.controllers import HeuristicController, LayaController, RandomController
 from laya_warehouse.recording import save_record, verify_record
+from laya_warehouse.scenarios import development_manifest, final_benchmark_manifest
 
 
 def sha256_file(path: Path) -> str:
@@ -44,7 +45,14 @@ def model_evidence(model: str) -> dict:
         metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
         evidence["training"] = {
             key: metrics.get(key)
-            for key in ("base_model", "seed", "best_epoch", "best_validation_score")
+            for key in (
+                "base_model",
+                "seed",
+                "best_epoch",
+                "best_validation_selection",
+                "training_augmentation",
+                "training_loss_weighting",
+            )
         }
     return evidence
 
@@ -54,6 +62,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", required=True, help="fine-tuned Laya model path or ID")
     parser.add_argument("--device", default="cuda", help="torch device for Laya")
     parser.add_argument("--max-ticks", type=int, default=40)
+    parser.add_argument(
+        "--manifest-role",
+        choices=("final", "development"),
+        default="final",
+        help="final is the frozen one-shot set; development reproduces earlier tuning evidence",
+    )
     parser.add_argument(
         "--output",
         type=Path,
@@ -86,10 +100,17 @@ def main() -> int:
         "laya": lambda _scenario: laya_controller,
         "random": lambda scenario: RandomController(random_seed_for_scenario(scenario)),
     }
+    specs = (
+        final_benchmark_manifest()
+        if args.manifest_role == "final"
+        else development_manifest()
+    )
     report, selected_records = run_benchmark(
         factories,
+        specs=specs,
         max_ticks=args.max_ticks,
         model_load_ms={"laya": laya_controller.model_load_ms},
+        evaluation_role=args.manifest_role,
     )
     report["controller_evidence"] = {
         "heuristic": {"implementation": "deterministic first-safe preference"},

@@ -91,7 +91,8 @@ class BenchmarkTests(unittest.TestCase):
         )
 
         self.assertEqual(report["report_schema_version"], 1)
-        self.assertEqual(report["manifest"]["version"], 1)
+        self.assertEqual(report["manifest"]["version"], 2)
+        self.assertEqual(report["evaluation_role"], "final")
         self.assertEqual(report["held_out_family"], "combined_pallet_worker")
         self.assertEqual(
             report["training_families"], ["stationary_pallet", "crossing_worker"]
