@@ -20,12 +20,15 @@ Laya evaluates several typed questions over one state in a single model invocati
 crossing makes the result visible: a late or poor decision can cause an avoidable stop, detour, or
 collision in an unshielded research run.
 
-Each decision includes:
+Each model invocation includes:
 
-- `action` — `choice`: advance, shift left, shift right, or wait.
+- Four `noul` questions score whether advance, shift left, shift right, or wait is best.
 - `collision_risk` — `score`: low through critical.
 - `path_blocked` — `noul`: probability that the direct path is blocked.
 - `needs_operator` — `noul`: probability that a person should review the situation.
+
+The controller selects the action with the highest binary probability. This keeps the action set
+small and uses Laya's strongest reported decision primitive.
 
 This repository is an experiment, not a certified robotics safety system.
 
@@ -93,7 +96,7 @@ episode to `results/laya-dgx.json`.
 
 ## Current milestone
 
-- Deterministic crossing scenario with workers and a forklift.
+- Deterministic crossing scenario with workers, a forklift, and a stationary pallet.
 - Structured observations suitable for Laya.
 - Heuristic, seeded-random, and Laya controllers.
 - Safety shield that records every overridden action.

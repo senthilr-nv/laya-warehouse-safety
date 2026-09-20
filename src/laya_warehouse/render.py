@@ -34,6 +34,7 @@ def render_record(record: dict[str, Any], *, fps: int = 4) -> None:
         "robot": (118, 185, 0),
         "worker": (74, 144, 226),
         "forklift": (244, 164, 66),
+        "pallet": (143, 113, 94),
         "text": (235, 239, 245),
         "muted": (163, 171, 184),
         "danger": (225, 84, 84),
@@ -82,6 +83,18 @@ def render_record(record: dict[str, Any], *, fps: int = 4) -> None:
             color = colors[actor["kind"]]
             if actor["kind"] == "worker":
                 pygame.draw.circle(screen, color, center, cell // 4)
+            elif actor["kind"] == "pallet":
+                pygame.draw.rect(
+                    screen,
+                    color,
+                    pygame.Rect(
+                        center[0] - cell // 4,
+                        center[1] - cell // 4,
+                        cell // 2,
+                        cell // 2,
+                    ),
+                    border_radius=3,
+                )
             else:
                 pygame.draw.rect(
                     screen,

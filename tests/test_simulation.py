@@ -3,6 +3,7 @@ from __future__ import annotations
 import unittest
 
 from laya_warehouse.controllers import HeuristicController, RandomController
+from laya_warehouse.controllers import LayaController
 from laya_warehouse.model import Action, Actor, World
 from laya_warehouse.recording import run_episode, verify_record
 
@@ -47,6 +48,32 @@ class SimulationTests(unittest.TestCase):
         record = run_episode(RandomController(seed=7), max_ticks=25)
 
         verify_record(record)
+
+    def test_laya_controller_selects_the_highest_binary_action_score(self) -> None:
+        class FakeAgent:
+            def predict(self, observation, questions):
+                self.observation = observation
+                self.questions = questions
+                return {
+                    "answers": {
+                        "advance_is_best": {"noul": 0.2},
+                        "shift_left_is_best": {"noul": 0.3},
+                        "shift_right_is_best": {"noul": 0.8},
+                        "wait_is_best": {"noul": 0.1},
+                        "collision_risk": {"score": 1.0},
+                        "path_blocked": {"noul": 0.7},
+                        "needs_operator": {"noul": 0.2},
+                    },
+                    "usage": {"input_tokens": 10, "output_tokens": 0},
+                }
+
+        controller = LayaController.__new__(LayaController)
+        controller._agent = FakeAgent()
+
+        decision = controller.decide(World.default().observe())
+
+        self.assertEqual(decision.action, Action.SHIFT_RIGHT)
+        self.assertEqual(decision.details["action_scores"]["shift_right"], 0.8)
 
 
 if __name__ == "__main__":

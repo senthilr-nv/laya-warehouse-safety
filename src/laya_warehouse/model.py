@@ -68,6 +68,7 @@ class World:
             actors=[
                 Actor("worker-a", "worker", 1, 6, 1),
                 Actor("forklift-a", "forklift", 9, 4, -1),
+                Actor("pallet-a", "pallet", 5, 3, 0),
                 Actor("worker-b", "worker", 2, 2, 1),
             ]
         )
@@ -127,7 +128,13 @@ class World:
                         "relative_column": actor.x - self.robot_x,
                         "rows_ahead": self.robot_y - actor.y,
                         "distance": "near" if distance <= 2 else "visible",
-                        "motion": "approaching" if next_distance < distance else "moving away",
+                        "motion": (
+                            "stationary"
+                            if actor.dx == 0
+                            else "approaching"
+                            if next_distance < distance
+                            else "moving away"
+                        ),
                     }
                 )
 
