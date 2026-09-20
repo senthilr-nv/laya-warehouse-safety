@@ -122,6 +122,10 @@ measure whether behavior learned from the two single-hazard families composes.
 raw simulator observation plus separate `action` and `path_blocked` labels. Model observations do
 not contain candidate safety, oracle actions, shield decisions, or labels.
 
+Training keeps every generated row and applies inverse-frequency loss weights per question and
+label. This prevents the many clear-path `advance` states from overwhelming rarer detour and wait
+decisions without changing the validation or benchmark distributions.
+
 The oracle finds the shortest collision-free route. Equal-length routes minimize lateral moves,
 then waits, then use this fixed action order: advance, shift left, shift right, wait. The
 `path_blocked` label means that forward-only travel in the robot's current column becomes unsafe

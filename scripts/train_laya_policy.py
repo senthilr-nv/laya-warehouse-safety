@@ -8,6 +8,7 @@ import json
 import os
 import random
 import time
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -112,6 +113,20 @@ def make_items(cases: list[dict[str, Any]], tokenizer, cfg: dict[str, Any]) -> l
     return items
 
 
+def add_inverse_frequency_weights(items: list[dict[str, Any]]) -> None:
+    """Give every label equal total weight within each typed question."""
+
+    keys = [(item["question_id"], str(item["label"])) for item in items]
+    counts = Counter(keys)
+    question_totals = Counter(question_id for question_id, _label in keys)
+    question_label_counts = Counter(question_id for question_id, _label in counts)
+    for item, key in zip(items, keys):
+        question_id, _label = key
+        item["sample_weight"] = question_totals[question_id] / (
+            question_label_counts[question_id] * counts[key]
+        )
+
+
 def collate(items: list[dict[str, Any]], pad_id: int) -> dict[str, Any]:
     size = len(items)
     length = max(len(item["ids"]) for item in items)
@@ -121,6 +136,7 @@ def collate(items: list[dict[str, Any]], pad_id: int) -> dict[str, Any]:
     marker_pos = torch.zeros((size, marker_count), dtype=torch.long)
     marker_mask = torch.zeros((size, marker_count), dtype=torch.bool)
     target = torch.zeros((size, marker_count), dtype=torch.float32)
+    sample_weight = torch.ones(size, dtype=torch.float32)
     for index, item in enumerate(items):
         item_length = len(item["ids"])
         item_markers = len(item["markers"])
@@ -129,12 +145,14 @@ def collate(items: list[dict[str, Any]], pad_id: int) -> dict[str, Any]:
         marker_pos[index, :item_markers] = torch.tensor(item["markers"])
         marker_mask[index, :item_markers] = True
         target[index, :item_markers] = torch.tensor(item["target"])
+        sample_weight[index] = item.get("sample_weight", 1.0)
     return {
         "input_ids": input_ids,
         "attention_mask": attention_mask,
         "marker_pos": marker_pos,
         "marker_mask": marker_mask,
         "target": target,
+        "sample_weight": sample_weight,
         "qtype": torch.tensor([item["qtype"] for item in items], dtype=torch.long),
         "meta": items,
     }
@@ -238,7 +256,8 @@ def train_epoch(
                 batch["qtype"],
             )
             log_probabilities = torch.log_softmax(logits.float(), dim=-1)
-            loss = -(batch["target"] * log_probabilities).sum(dim=-1).mean()
+            item_loss = -(batch["target"] * log_probabilities).sum(dim=-1)
+            loss = (item_loss * batch["sample_weight"]).mean()
             loss = loss + 0.0 * act.sum()
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
@@ -305,6 +324,7 @@ def main() -> int:
         dtype = torch.float16
     train_items = make_items(train_cases, tokenizer, cfg)
     eval_items = make_items(eval_cases, tokenizer, cfg)
+    add_inverse_frequency_weights(train_items)
 
     baseline = evaluate(
         model,
@@ -384,6 +404,7 @@ def main() -> int:
         "epochs": epoch_metrics,
         "best_epoch": best_epoch,
         "best_validation_score": round(best_score, 4),
+        "training_loss_weighting": "inverse frequency by question and label",
         "elapsed_seconds": round(time.time() - started, 2),
     }
     save_checkpoint(args.output, cfg=cfg, tokenizer=tokenizer, model=model, metrics=metrics)
