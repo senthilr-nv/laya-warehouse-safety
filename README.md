@@ -36,7 +36,7 @@ That replay's model was domain-trained only for `action`. It preserves the other
 demonstrate Laya's typed interface, but they are unvalidated diagnostics. Do not interpret them as
 calibrated warehouse risk or escalation signals.
 
-The reproducible benchmark trains and evaluates only `action` and `path_blocked`. It does not train
+The benchmark harness trains and evaluates only `action` and `path_blocked`. It does not train
 `collision_risk` or `needs_operator`, and makes no calibration claim about either one.
 
 Generic Laya checkpoints are useful baselines, but they are not warehouse policies. The repository
@@ -142,7 +142,7 @@ Generate any frozen split with:
 laya-warehouse make-dataset --split validation --output results/validation.jsonl
 ```
 
-## Reproducible benchmark
+## Benchmark harness and recorded evidence
 
 The benchmark runs fine-tuned Laya, the deterministic heuristic, and a seeded-random policy over
 the same IID and compositional OOD manifest. By default it selects the frozen final manifest. Every
@@ -173,8 +173,14 @@ reported separately and are excluded from the deterministic digest.
 See [`benchmarks/README.md`](benchmarks/README.md) for the preserved development history, one-shot
 final results, and replay-verifiable evidence.
 
-To reproduce the earlier tuning evidence instead, pass `--manifest-role development`. Never report
-that manifest as an untouched final test.
+The simulator, manifests, metrics, and checked-in replays can be independently verified. The exact
+fine-tuned weights used by the final Laya run are not published, so that model inference run cannot
+be reproduced from this repository alone. The report records the weights SHA-256 for identity, not
+retrieval. You can train a new checkpoint with the documented recipe, but it is not guaranteed to
+be bit-identical.
+
+To execute the earlier development manifest instead, pass `--manifest-role development`. Never
+report that manifest as an untouched final test.
 
 ### DGX Spark container
 

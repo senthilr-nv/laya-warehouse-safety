@@ -20,6 +20,7 @@
       "implementation": "deterministic first-safe preference"
     },
     "laya": {
+      "base_model_cache_ref_after_run": "1c5edc17a7acd8701df6fc341c0d179f1c62c982",
       "fine_tuned": true,
       "identifier": "/results/laya-final-model-55f60f2",
       "trained_questions": [
@@ -3872,24 +3873,24 @@
     }
   },
   "selected_episode_files": {
-    "heuristic-layered-combined_pallet_worker": "/results/benchmark-final-55f60f2-episodes/heuristic-layered-combined_pallet_worker.json",
-    "heuristic-layered-crossing_worker": "/results/benchmark-final-55f60f2-episodes/heuristic-layered-crossing_worker.json",
-    "heuristic-layered-stationary_pallet": "/results/benchmark-final-55f60f2-episodes/heuristic-layered-stationary_pallet.json",
-    "heuristic-policy_only-combined_pallet_worker": "/results/benchmark-final-55f60f2-episodes/heuristic-policy_only-combined_pallet_worker.json",
-    "heuristic-policy_only-crossing_worker": "/results/benchmark-final-55f60f2-episodes/heuristic-policy_only-crossing_worker.json",
-    "heuristic-policy_only-stationary_pallet": "/results/benchmark-final-55f60f2-episodes/heuristic-policy_only-stationary_pallet.json",
-    "laya-layered-combined_pallet_worker": "/results/benchmark-final-55f60f2-episodes/laya-layered-combined_pallet_worker.json",
-    "laya-layered-crossing_worker": "/results/benchmark-final-55f60f2-episodes/laya-layered-crossing_worker.json",
-    "laya-layered-stationary_pallet": "/results/benchmark-final-55f60f2-episodes/laya-layered-stationary_pallet.json",
-    "laya-policy_only-combined_pallet_worker": "/results/benchmark-final-55f60f2-episodes/laya-policy_only-combined_pallet_worker.json",
-    "laya-policy_only-crossing_worker": "/results/benchmark-final-55f60f2-episodes/laya-policy_only-crossing_worker.json",
-    "laya-policy_only-stationary_pallet": "/results/benchmark-final-55f60f2-episodes/laya-policy_only-stationary_pallet.json",
-    "random-layered-combined_pallet_worker": "/results/benchmark-final-55f60f2-episodes/random-layered-combined_pallet_worker.json",
-    "random-layered-crossing_worker": "/results/benchmark-final-55f60f2-episodes/random-layered-crossing_worker.json",
-    "random-layered-stationary_pallet": "/results/benchmark-final-55f60f2-episodes/random-layered-stationary_pallet.json",
-    "random-policy_only-combined_pallet_worker": "/results/benchmark-final-55f60f2-episodes/random-policy_only-combined_pallet_worker.json",
-    "random-policy_only-crossing_worker": "/results/benchmark-final-55f60f2-episodes/random-policy_only-crossing_worker.json",
-    "random-policy_only-stationary_pallet": "/results/benchmark-final-55f60f2-episodes/random-policy_only-stationary_pallet.json"
+    "heuristic-layered-combined_pallet_worker": "heuristic-layered-combined_pallet_worker.json",
+    "heuristic-layered-crossing_worker": "heuristic-layered-crossing_worker.json",
+    "heuristic-layered-stationary_pallet": "heuristic-layered-stationary_pallet.json",
+    "heuristic-policy_only-combined_pallet_worker": "heuristic-policy_only-combined_pallet_worker.json",
+    "heuristic-policy_only-crossing_worker": "heuristic-policy_only-crossing_worker.json",
+    "heuristic-policy_only-stationary_pallet": "heuristic-policy_only-stationary_pallet.json",
+    "laya-layered-combined_pallet_worker": "laya-layered-combined_pallet_worker.json",
+    "laya-layered-crossing_worker": "laya-layered-crossing_worker.json",
+    "laya-layered-stationary_pallet": "laya-layered-stationary_pallet.json",
+    "laya-policy_only-combined_pallet_worker": "laya-policy_only-combined_pallet_worker.json",
+    "laya-policy_only-crossing_worker": "laya-policy_only-crossing_worker.json",
+    "laya-policy_only-stationary_pallet": "laya-policy_only-stationary_pallet.json",
+    "random-layered-combined_pallet_worker": "random-layered-combined_pallet_worker.json",
+    "random-layered-crossing_worker": "random-layered-crossing_worker.json",
+    "random-layered-stationary_pallet": "random-layered-stationary_pallet.json",
+    "random-policy_only-combined_pallet_worker": "random-policy_only-combined_pallet_worker.json",
+    "random-policy_only-crossing_worker": "random-policy_only-crossing_worker.json",
+    "random-policy_only-stationary_pallet": "random-policy_only-stationary_pallet.json"
   },
   "selected_episode_keys": [
     "heuristic-layered-combined_pallet_worker",

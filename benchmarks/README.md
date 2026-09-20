@@ -74,6 +74,24 @@ The measured Laya runtime was 7,671.8053 ms model load, 707.5028 ms first infere
 p50, and 28.3339 ms warm p95 over 830 warm decisions. These measurements describe this container
 run only.
 
+## Reproduction boundary
+
+The repository contains the benchmark implementation, immutable manifest, complete aggregate
+report, training metrics, and selected simulator records. Their digests and replay transitions can
+be independently verified.
+
+The exact fine-tuned checkpoint is not published. It remained at
+`/results/laya-final-model-55f60f2` on the DGX Spark; the final report records its SHA-256 as
+`a4a3bd6746d5a01b6147cf673f1d7a8909406cf72dcc0f285981f738c6be44a8`. A hash identifies the
+weights but cannot retrieve them, so the exact model inference run is not reproducible from this
+repository alone. Publishing those weights requires a separate decision and authorization.
+
+After the run, the DGX Hugging Face cache's `convaiinnovations/laya` `refs/main` pointed to snapshot
+`1c5edc17a7acd8701df6fc341c0d179f1c62c982`. The training script did not persist the snapshot path
+it received, so this cache audit is useful provenance but does not cryptographically bind that
+revision to the training run. Training a new checkpoint from the documented recipe is possible but
+does not recreate the exact recorded weights.
+
 ## Artifacts
 
 - [`final/report.json`](final/report.json) — versioned final report with all aggregate and

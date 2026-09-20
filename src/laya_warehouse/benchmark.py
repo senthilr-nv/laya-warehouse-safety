@@ -283,5 +283,13 @@ def save_benchmark_report(report: dict[str, Any], path: Path) -> None:
     path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def selected_episode_filenames(
+    selected_records: dict[str, dict[str, Any]],
+) -> dict[str, str]:
+    """Return portable filenames for selected records stored in a separate directory."""
+
+    return {key: f"{key}.json" for key in sorted(selected_records)}
+
+
 def random_seed_for_scenario(scenario: ScenarioSpec) -> int:
     return _stable_seed(scenario.scenario_id)

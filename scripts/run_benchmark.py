@@ -12,6 +12,7 @@ from laya_warehouse.benchmark import (
     random_seed_for_scenario,
     run_benchmark,
     save_benchmark_report,
+    selected_episode_filenames,
 )
 from laya_warehouse.controllers import HeuristicController, LayaController, RandomController
 from laya_warehouse.recording import save_record, verify_record
@@ -66,7 +67,7 @@ def parse_args() -> argparse.Namespace:
         "--manifest-role",
         choices=("final", "development"),
         default="final",
-        help="final is the frozen one-shot set; development reproduces earlier tuning evidence",
+        help="final is the frozen one-shot set; development selects earlier tuning evidence",
     )
     parser.add_argument(
         "--output",
@@ -118,13 +119,11 @@ def main() -> int:
         "random": {"seed": "sha256(scenario_id) first 32 bits"},
     }
 
-    episode_files = {}
     for key, record in sorted(selected_records.items()):
         verify_record(record)
         episode_path = args.episodes_dir / f"{key}.json"
         save_record(record, episode_path)
-        episode_files[key] = str(episode_path)
-    report["selected_episode_files"] = episode_files
+    report["selected_episode_files"] = selected_episode_filenames(selected_records)
     save_benchmark_report(report, args.output)
 
     compact_results = {

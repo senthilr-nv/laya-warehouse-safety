@@ -6,7 +6,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from laya_warehouse.benchmark import run_benchmark, save_benchmark_report
+from laya_warehouse.benchmark import (
+    run_benchmark,
+    save_benchmark_report,
+    selected_episode_filenames,
+)
 from laya_warehouse.controllers import Decision
 from laya_warehouse.model import Action, World
 from laya_warehouse.oracle import direct_path_blocked, shortest_collision_free_plan
@@ -58,6 +62,14 @@ class BenchmarkTests(unittest.TestCase):
             self.assertEqual(metrics["path_blocked"]["brier"], 0.0)
 
         self.assertEqual(len(selected), 6)
+        filenames = selected_episode_filenames(selected)
+        self.assertEqual(set(filenames), set(selected))
+        self.assertTrue(
+            all(Path(filename).name == filename for filename in filenames.values())
+        )
+        self.assertTrue(
+            all(not Path(filename).is_absolute() for filename in filenames.values())
+        )
         for record in selected.values():
             verify_record(record)
 
