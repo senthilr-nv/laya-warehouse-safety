@@ -49,17 +49,22 @@ class SimulationTests(unittest.TestCase):
 
         verify_record(record)
 
-    def test_laya_controller_selects_the_highest_binary_action_score(self) -> None:
+    def test_laya_controller_uses_the_typed_action_choice(self) -> None:
         class FakeAgent:
             def predict(self, observation, questions):
                 self.observation = observation
                 self.questions = questions
                 return {
                     "answers": {
-                        "advance_is_best": {"noul": 0.2},
-                        "shift_left_is_best": {"noul": 0.3},
-                        "shift_right_is_best": {"noul": 0.8},
-                        "wait_is_best": {"noul": 0.1},
+                        "action": {
+                            "choice": "shift_right",
+                            "probabilities": {
+                                "advance": 0.2,
+                                "shift_left": 0.1,
+                                "shift_right": 0.6,
+                                "wait": 0.1,
+                            },
+                        },
                         "collision_risk": {"score": 1.0},
                         "path_blocked": {"noul": 0.7},
                         "needs_operator": {"noul": 0.2},
@@ -73,7 +78,7 @@ class SimulationTests(unittest.TestCase):
         decision = controller.decide(World.default().observe())
 
         self.assertEqual(decision.action, Action.SHIFT_RIGHT)
-        self.assertEqual(decision.details["action_scores"]["shift_right"], 0.8)
+        self.assertEqual(decision.details["action_scores"]["shift_right"], 0.6)
 
 
 if __name__ == "__main__":

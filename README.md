@@ -20,15 +20,15 @@ Laya evaluates several typed questions over one state in a single model invocati
 crossing makes the result visible: a late or poor decision can cause an avoidable stop, detour, or
 collision in an unshielded research run.
 
-Each model invocation includes:
+Each model invocation evaluates these outputs in parallel:
 
-- Four `noul` questions score whether advance, shift left, shift right, or wait is best.
+- `action` — `choice`: a normalized distribution over advance, shift left, shift right, and wait.
 - `collision_risk` — `score`: low through critical.
 - `path_blocked` — `noul`: probability that the direct path is blocked.
 - `needs_operator` — `noul`: probability that a person should review the situation.
 
-The controller selects the action with the highest binary probability. This keeps the action set
-small and uses Laya's strongest reported decision primitive.
+The controller applies Laya's selected action. Keeping all actions in one normalized choice avoids
+comparing probabilities from separately phrased binary questions.
 
 Generic Laya checkpoints are useful baselines, but they are not warehouse policies. The repository
 therefore generates its own balanced training states and provides a small domain fine-tuning path.

@@ -8,7 +8,6 @@ import json
 import os
 import random
 import time
-from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -57,31 +56,32 @@ def load_checkpoint(model_id: str, device: torch.device):
 
 def make_items(cases: list[dict[str, Any]], tokenizer, cfg: dict[str, Any]) -> list[dict[str, Any]]:
     items = []
+    question = LayaController.QUESTIONS["action"]
+    actions = list(question["criteria"])
     for case in cases:
-        label = Action(case["label"])
-        for action, question_id in LayaController.ACTION_QUESTIONS.items():
-            question = LayaController.QUESTIONS[question_id]
-            ids, markers = build_sequence(
-                tokenizer,
-                case["state"],
-                {"t": "noul", "ins": question["instructions"], "crit": {}},
-                cfg["max_len"],
-                cfg["head_max_len"],
-            )
-            if len(markers) != 2:
-                raise RuntimeError(f"question {question_id} did not produce two decision markers")
-            positive = action is label
-            items.append(
-                {
-                    "ids": ids,
-                    "markers": markers,
-                    "qtype": QTYPES["noul"],
-                    "target": [0.02, 0.98] if positive else [0.98, 0.02],
-                    "case_id": case["id"],
-                    "action": action.value,
-                    "label": label.value,
-                }
-            )
+        label = Action(case["label"]).value
+        ids, markers = build_sequence(
+            tokenizer,
+            case["state"],
+            {"t": "choice", "ins": question["instructions"], "crit": question["criteria"]},
+            cfg["max_len"],
+            cfg["head_max_len"],
+        )
+        if len(markers) != len(actions):
+            raise RuntimeError("action question did not produce one marker per choice")
+        target = [0.02] * len(actions)
+        target[actions.index(label)] = 0.94
+        items.append(
+            {
+                "ids": ids,
+                "markers": markers,
+                "qtype": QTYPES["choice"],
+                "target": target,
+                "case_id": case["id"],
+                "actions": actions,
+                "label": label,
+            }
+        )
     return items
 
 
@@ -108,7 +108,7 @@ def collate(items: list[dict[str, Any]], pad_id: int) -> dict[str, Any]:
         "marker_pos": marker_pos,
         "marker_mask": marker_mask,
         "target": target,
-        "qtype": torch.full((size,), QTYPES["noul"], dtype=torch.long),
+        "qtype": torch.tensor([item["qtype"] for item in items], dtype=torch.long),
         "meta": items,
     }
 
@@ -131,8 +131,8 @@ def evaluate(
     dtype: torch.dtype,
 ) -> dict[str, Any]:
     model.eval()
-    scores: dict[str, dict[str, float]] = defaultdict(dict)
-    labels: dict[str, str] = {}
+    correct = 0
+    per_label: dict[str, list[int]] = {action.value: [] for action in Action}
     for offset in range(0, len(items), batch_size):
         batch = move_batch(collate(items[offset : offset + batch_size], pad_id), device)
         with torch.autocast(device_type=device.type, dtype=dtype):
@@ -143,21 +143,15 @@ def evaluate(
                 batch["marker_mask"],
                 batch["qtype"],
             )
-        probabilities = torch.softmax(logits.float(), dim=-1)[:, 1].cpu().tolist()
-        for meta, probability in zip(batch["meta"], probabilities):
-            scores[meta["case_id"]][meta["action"]] = probability
-            labels[meta["case_id"]] = meta["label"]
-
-    correct = 0
-    per_label: dict[str, list[int]] = defaultdict(list)
-    for case_id, action_scores in scores.items():
-        prediction = max(action_scores, key=action_scores.get)
-        is_correct = int(prediction == labels[case_id])
-        correct += is_correct
-        per_label[labels[case_id]].append(is_correct)
+        predictions = torch.argmax(logits.float(), dim=-1).cpu().tolist()
+        for meta, prediction_index in zip(batch["meta"], predictions):
+            prediction = meta["actions"][prediction_index]
+            is_correct = int(prediction == meta["label"])
+            correct += is_correct
+            per_label[meta["label"]].append(is_correct)
     return {
-        "accuracy": round(correct / len(scores), 4),
-        "cases": len(scores),
+        "accuracy": round(correct / len(items), 4),
+        "cases": len(items),
         "per_label_accuracy": {
             label: round(sum(values) / len(values), 4)
             for label, values in sorted(per_label.items())
@@ -287,6 +281,9 @@ def main() -> int:
     scaler = torch.amp.GradScaler("cuda", enabled=dtype == torch.float16)
     rng = random.Random(args.seed)
     epoch_metrics = []
+    best_accuracy = -1.0
+    best_epoch = 0
+    best_state = None
     for epoch in range(1, args.epochs + 1):
         loss = train_epoch(
             model,
@@ -310,6 +307,17 @@ def main() -> int:
         epoch_metric = {"epoch": epoch, "loss": round(loss, 5), "evaluation": evaluation}
         epoch_metrics.append(epoch_metric)
         print("epoch:", json.dumps(epoch_metric, sort_keys=True), flush=True)
+        if evaluation["accuracy"] > best_accuracy:
+            best_accuracy = evaluation["accuracy"]
+            best_epoch = epoch
+            best_state = {
+                name: value.detach().half().cpu().clone()
+                for name, value in model.state_dict().items()
+            }
+
+    if best_state is None:
+        raise RuntimeError("training completed without a checkpoint")
+    model.load_state_dict(best_state, strict=True)
 
     metrics = {
         "base_model": args.model,
@@ -318,6 +326,8 @@ def main() -> int:
         "evaluation_dataset": dataset_summary(eval_cases),
         "baseline": baseline,
         "epochs": epoch_metrics,
+        "best_epoch": best_epoch,
+        "best_accuracy": best_accuracy,
         "elapsed_seconds": round(time.time() - started, 2),
     }
     save_checkpoint(args.output, cfg=cfg, tokenizer=tokenizer, model=model, metrics=metrics)

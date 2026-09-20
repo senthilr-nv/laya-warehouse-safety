@@ -67,43 +67,16 @@ class LayaController:
 
     name = "laya"
 
-    ACTION_QUESTIONS = {
-        Action.ADVANCE: "advance_is_best",
-        Action.SHIFT_LEFT: "shift_left_is_best",
-        Action.SHIFT_RIGHT: "shift_right_is_best",
-        Action.WAIT: "wait_is_best",
-    }
-
     QUESTIONS = {
-        "advance_is_best": {
-            "type": "noul",
-            "instructions": (
-                "Is advance the best safe next action? Answer true only when "
-                "candidate_moves.advance.safe is true and advancing improves progress to the goal."
-            ),
-        },
-        "shift_left_is_best": {
-            "type": "noul",
-            "instructions": (
-                "Is shift_left the best safe next action? Answer true only when "
-                "candidate_moves.shift_left.safe is true and shifting left avoids a blocked path "
-                "or moves the robot toward a goal column."
-            ),
-        },
-        "shift_right_is_best": {
-            "type": "noul",
-            "instructions": (
-                "Is shift_right the best safe next action? Answer true only when "
-                "candidate_moves.shift_right.safe is true and shifting right avoids a blocked path "
-                "or moves the robot toward a goal column."
-            ),
-        },
-        "wait_is_best": {
-            "type": "noul",
-            "instructions": (
-                "Is wait the best safe next action? Answer true when traffic should pass before "
-                "the robot moves and candidate_moves.wait.safe is true."
-            ),
+        "action": {
+            "type": "choice",
+            "instructions": "Which action is the best safe next move toward the loading bay?",
+            "criteria": {
+                "advance": "move one row toward the loading bay when the route is clear",
+                "shift_left": "move left around a stationary obstacle or toward a goal column",
+                "shift_right": "move right around a stationary obstacle or toward a goal column",
+                "wait": "hold position while temporary cross-aisle traffic passes",
+            },
         },
         "collision_risk": {
             "type": "score",
@@ -135,16 +108,13 @@ class LayaController:
         result = self._agent.predict(observation, self.QUESTIONS)
         latency_ms = (time.perf_counter() - start) * 1000
         answers = result["answers"]
-        action_scores = {
-            action: answers[question_id]["noul"]
-            for action, question_id in self.ACTION_QUESTIONS.items()
-        }
-        action = max(action_scores, key=action_scores.get)
+        action_answer = answers["action"]
+        action = Action(action_answer["choice"])
         return Decision(
             action=action,
             latency_ms=latency_ms,
             details={
-                "action_scores": {item.value: score for item, score in action_scores.items()},
+                "action_scores": action_answer["probabilities"],
                 "answers": answers,
                 "usage": result["usage"],
             },
