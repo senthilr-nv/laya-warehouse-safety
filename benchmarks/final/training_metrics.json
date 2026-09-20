@@ -1,0 +1,493 @@
+{
+  "base_model": "convaiinnovations/laya",
+  "seed": 17,
+  "source_train_dataset": {
+    "cases": 380,
+    "splits": [
+      "train"
+    ],
+    "families": {
+      "crossing_worker": 200,
+      "stationary_pallet": 180
+    },
+    "labels": {
+      "action": {
+        "advance": 320,
+        "shift_left": 12,
+        "shift_right": 8,
+        "wait": 40
+      },
+      "path_blocked": {
+        "false": 244,
+        "true": 136
+      }
+    },
+    "manifest_digest": "ec70971fdb33695410b93729b4e98f5a7b06057f4926693582925bdf51719522"
+  },
+  "train_dataset": {
+    "cases": 760,
+    "splits": [
+      "train"
+    ],
+    "families": {
+      "crossing_worker": 400,
+      "stationary_pallet": 360
+    },
+    "labels": {
+      "action": {
+        "advance": 640,
+        "shift_left": 24,
+        "shift_right": 16,
+        "wait": 80
+      },
+      "path_blocked": {
+        "false": 488,
+        "true": 272
+      }
+    },
+    "manifest_digest": "ec70971fdb33695410b93729b4e98f5a7b06057f4926693582925bdf51719522"
+  },
+  "evaluation_dataset": {
+    "cases": 114,
+    "splits": [
+      "validation"
+    ],
+    "families": {
+      "crossing_worker": 60,
+      "stationary_pallet": 54
+    },
+    "labels": {
+      "action": {
+        "advance": 96,
+        "shift_left": 3,
+        "shift_right": 3,
+        "wait": 12
+      },
+      "path_blocked": {
+        "false": 72,
+        "true": 42
+      }
+    },
+    "manifest_digest": "b4d74709dd30ca9a1e89e9b35e2bb31aecf43bb3d56172fb74a59395a0c0411e"
+  },
+  "baseline": {
+    "action": {
+      "accuracy": 0.8421,
+      "cases": 114,
+      "per_label_accuracy": {
+        "advance": 1.0,
+        "shift_left": 0.0,
+        "shift_right": 0.0,
+        "wait": 0.0
+      },
+      "per_label": {
+        "advance": {
+          "accuracy": 1.0,
+          "correct": 96,
+          "cases": 96
+        },
+        "shift_left": {
+          "accuracy": 0.0,
+          "correct": 0,
+          "cases": 3
+        },
+        "shift_right": {
+          "accuracy": 0.0,
+          "correct": 0,
+          "cases": 3
+        },
+        "wait": {
+          "accuracy": 0.0,
+          "correct": 0,
+          "cases": 12
+        }
+      },
+      "macro_accuracy": 0.25,
+      "minimum_label_accuracy": 0.0
+    },
+    "path_blocked": {
+      "accuracy": 0.3947,
+      "brier": 0.4616,
+      "cases": 114
+    }
+  },
+  "epochs": [
+    {
+      "epoch": 1,
+      "loss": 0.82788,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.9123,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 0.9792,
+            "shift_left": 0.3333,
+            "shift_right": 0.6667,
+            "wait": 0.5833
+          },
+          "per_label": {
+            "advance": {
+              "accuracy": 0.9792,
+              "correct": 94,
+              "cases": 96
+            },
+            "shift_left": {
+              "accuracy": 0.3333,
+              "correct": 1,
+              "cases": 3
+            },
+            "shift_right": {
+              "accuracy": 0.6667,
+              "correct": 2,
+              "cases": 3
+            },
+            "wait": {
+              "accuracy": 0.5833,
+              "correct": 7,
+              "cases": 12
+            }
+          },
+          "macro_accuracy": 0.6406,
+          "minimum_label_accuracy": 0.3333
+        },
+        "path_blocked": {
+          "accuracy": 0.8421,
+          "brier": 0.0814,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 2,
+      "loss": 0.62493,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.8509,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 0.8542,
+            "shift_left": 0.0,
+            "shift_right": 1.0,
+            "wait": 1.0
+          },
+          "per_label": {
+            "advance": {
+              "accuracy": 0.8542,
+              "correct": 82,
+              "cases": 96
+            },
+            "shift_left": {
+              "accuracy": 0.0,
+              "correct": 0,
+              "cases": 3
+            },
+            "shift_right": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "wait": {
+              "accuracy": 1.0,
+              "correct": 12,
+              "cases": 12
+            }
+          },
+          "macro_accuracy": 0.7136,
+          "minimum_label_accuracy": 0.0
+        },
+        "path_blocked": {
+          "accuracy": 0.9561,
+          "brier": 0.0334,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 3,
+      "loss": 0.5693,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.8596,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 0.8646,
+            "shift_left": 0.0,
+            "shift_right": 1.0,
+            "wait": 1.0
+          },
+          "per_label": {
+            "advance": {
+              "accuracy": 0.8646,
+              "correct": 83,
+              "cases": 96
+            },
+            "shift_left": {
+              "accuracy": 0.0,
+              "correct": 0,
+              "cases": 3
+            },
+            "shift_right": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "wait": {
+              "accuracy": 1.0,
+              "correct": 12,
+              "cases": 12
+            }
+          },
+          "macro_accuracy": 0.7162,
+          "minimum_label_accuracy": 0.0
+        },
+        "path_blocked": {
+          "accuracy": 0.9123,
+          "brier": 0.0562,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 4,
+      "loss": 0.44567,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.9737,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 1.0,
+            "shift_left": 1.0,
+            "shift_right": 1.0,
+            "wait": 0.75
+          },
+          "per_label": {
+            "advance": {
+              "accuracy": 1.0,
+              "correct": 96,
+              "cases": 96
+            },
+            "shift_left": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "shift_right": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "wait": {
+              "accuracy": 0.75,
+              "correct": 9,
+              "cases": 12
+            }
+          },
+          "macro_accuracy": 0.9375,
+          "minimum_label_accuracy": 0.75
+        },
+        "path_blocked": {
+          "accuracy": 0.9298,
+          "brier": 0.0664,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 5,
+      "loss": 0.28704,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.9912,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 0.9896,
+            "shift_left": 1.0,
+            "shift_right": 1.0,
+            "wait": 1.0
+          },
+          "per_label": {
+            "advance": {
+              "accuracy": 0.9896,
+              "correct": 95,
+              "cases": 96
+            },
+            "shift_left": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "shift_right": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "wait": {
+              "accuracy": 1.0,
+              "correct": 12,
+              "cases": 12
+            }
+          },
+          "macro_accuracy": 0.9974,
+          "minimum_label_accuracy": 0.9896
+        },
+        "path_blocked": {
+          "accuracy": 0.9912,
+          "brier": 0.0061,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 6,
+      "loss": 0.25134,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.9737,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 1.0,
+            "shift_left": 1.0,
+            "shift_right": 0.3333,
+            "wait": 0.9167
+          },
+          "per_label": {
+            "advance": {
+              "accuracy": 1.0,
+              "correct": 96,
+              "cases": 96
+            },
+            "shift_left": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "shift_right": {
+              "accuracy": 0.3333,
+              "correct": 1,
+              "cases": 3
+            },
+            "wait": {
+              "accuracy": 0.9167,
+              "correct": 11,
+              "cases": 12
+            }
+          },
+          "macro_accuracy": 0.8125,
+          "minimum_label_accuracy": 0.3333
+        },
+        "path_blocked": {
+          "accuracy": 0.8596,
+          "brier": 0.1278,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 7,
+      "loss": 0.37496,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.9912,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 0.9896,
+            "shift_left": 1.0,
+            "shift_right": 1.0,
+            "wait": 1.0
+          },
+          "per_label": {
+            "advance": {
+              "accuracy": 0.9896,
+              "correct": 95,
+              "cases": 96
+            },
+            "shift_left": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "shift_right": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "wait": {
+              "accuracy": 1.0,
+              "correct": 12,
+              "cases": 12
+            }
+          },
+          "macro_accuracy": 0.9974,
+          "minimum_label_accuracy": 0.9896
+        },
+        "path_blocked": {
+          "accuracy": 0.9825,
+          "brier": 0.0142,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 8,
+      "loss": 0.2726,
+      "evaluation": {
+        "action": {
+          "accuracy": 1.0,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 1.0,
+            "shift_left": 1.0,
+            "shift_right": 1.0,
+            "wait": 1.0
+          },
+          "per_label": {
+            "advance": {
+              "accuracy": 1.0,
+              "correct": 96,
+              "cases": 96
+            },
+            "shift_left": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "shift_right": {
+              "accuracy": 1.0,
+              "correct": 3,
+              "cases": 3
+            },
+            "wait": {
+              "accuracy": 1.0,
+              "correct": 12,
+              "cases": 12
+            }
+          },
+          "macro_accuracy": 1.0,
+          "minimum_label_accuracy": 1.0
+        },
+        "path_blocked": {
+          "accuracy": 1.0,
+          "brier": 0.0004,
+          "cases": 114
+        }
+      }
+    }
+  ],
+  "best_epoch": 8,
+  "best_validation_selection": {
+    "minimum_action_label_accuracy": 1.0,
+    "action_macro_accuracy": 1.0,
+    "path_blocked_accuracy": 1.0,
+    "path_blocked_brier": 0.0004
+  },
+  "checkpoint_selection_order": [
+    "minimum_action_label_accuracy",
+    "action_macro_accuracy",
+    "path_blocked_accuracy",
+    "lowest_path_blocked_brier"
+  ],
+  "validation_support_warning": "Lateral action labels have three cases each; report them as development evidence, not stable recall estimates.",
+  "training_augmentation": "horizontal mirror",
+  "training_loss_weighting": "inverse frequency by question and label",
+  "elapsed_seconds": 398.2
+}

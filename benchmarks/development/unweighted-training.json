@@ -1,0 +1,135 @@
+{
+  "base_model": "convaiinnovations/laya",
+  "seed": 17,
+  "train_dataset": {
+    "cases": 380,
+    "splits": [
+      "train"
+    ],
+    "families": {
+      "crossing_worker": 200,
+      "stationary_pallet": 180
+    },
+    "labels": {
+      "action": {
+        "advance": 320,
+        "shift_left": 12,
+        "shift_right": 8,
+        "wait": 40
+      },
+      "path_blocked": {
+        "false": 244,
+        "true": 136
+      }
+    },
+    "manifest_digest": "ec70971fdb33695410b93729b4e98f5a7b06057f4926693582925bdf51719522"
+  },
+  "evaluation_dataset": {
+    "cases": 114,
+    "splits": [
+      "validation"
+    ],
+    "families": {
+      "crossing_worker": 60,
+      "stationary_pallet": 54
+    },
+    "labels": {
+      "action": {
+        "advance": 96,
+        "shift_left": 3,
+        "shift_right": 3,
+        "wait": 12
+      },
+      "path_blocked": {
+        "false": 72,
+        "true": 42
+      }
+    },
+    "manifest_digest": "b4d74709dd30ca9a1e89e9b35e2bb31aecf43bb3d56172fb74a59395a0c0411e"
+  },
+  "baseline": {
+    "action": {
+      "accuracy": 0.8421,
+      "cases": 114,
+      "per_label_accuracy": {
+        "advance": 1.0,
+        "shift_left": 0.0,
+        "shift_right": 0.0,
+        "wait": 0.0
+      }
+    },
+    "path_blocked": {
+      "accuracy": 0.3947,
+      "brier": 0.4616,
+      "cases": 114
+    }
+  },
+  "epochs": [
+    {
+      "epoch": 1,
+      "loss": 0.6233,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.8596,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 0.9375,
+            "shift_left": 0.0,
+            "shift_right": 0.0,
+            "wait": 0.6667
+          }
+        },
+        "path_blocked": {
+          "accuracy": 0.9123,
+          "brier": 0.0799,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 2,
+      "loss": 0.43765,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.886,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 1.0,
+            "shift_left": 0.0,
+            "shift_right": 0.0,
+            "wait": 0.4167
+          }
+        },
+        "path_blocked": {
+          "accuracy": 0.8947,
+          "brier": 0.0639,
+          "cases": 114
+        }
+      }
+    },
+    {
+      "epoch": 3,
+      "loss": 0.40308,
+      "evaluation": {
+        "action": {
+          "accuracy": 0.8684,
+          "cases": 114,
+          "per_label_accuracy": {
+            "advance": 1.0,
+            "shift_left": 0.3333,
+            "shift_right": 0.0,
+            "wait": 0.1667
+          }
+        },
+        "path_blocked": {
+          "accuracy": 0.9211,
+          "brier": 0.0742,
+          "cases": 114
+        }
+      }
+    }
+  ],
+  "best_epoch": 3,
+  "best_validation_score": 0.8947,
+  "elapsed_seconds": 85.11
+}

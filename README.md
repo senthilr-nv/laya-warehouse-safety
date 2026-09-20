@@ -170,6 +170,9 @@ python scripts/run_benchmark.py \
 The report contains a manifest digest and a deterministic result digest. Runtime measurements are
 reported separately and are excluded from the deterministic digest.
 
+See [`benchmarks/README.md`](benchmarks/README.md) for the preserved development history, one-shot
+final results, and replay-verifiable evidence.
+
 To reproduce the earlier tuning evidence instead, pass `--manifest-role development`. Never report
 that manifest as an untouched final test.
 
