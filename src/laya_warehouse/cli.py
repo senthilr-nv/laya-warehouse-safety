@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Sequence
 
 from .controllers import HeuristicController, LayaController, RandomController
+from .dataset import dataset_summary, generate_cases, save_cases
 from .recording import load_record, run_episode, save_record, verify_record
 from .render import render_record
 
@@ -46,6 +47,13 @@ def _parser() -> argparse.ArgumentParser:
     replay.add_argument("record", type=Path)
     replay.add_argument("--headless", action="store_true")
     replay.add_argument("--fps", type=int, default=4)
+
+    dataset = subparsers.add_parser(
+        "make-dataset", help="generate balanced labeled simulator states"
+    )
+    dataset.add_argument("--per-action", type=int, default=128)
+    dataset.add_argument("--seed", type=int, default=0)
+    dataset.add_argument("--output", type=Path, default=Path("results/train.jsonl"))
     return parser
 
 
@@ -64,6 +72,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         if not args.headless:
             render_record(record, fps=args.fps)
+        return 0
+
+    if args.command == "make-dataset":
+        cases = generate_cases(per_action=args.per_action, seed=args.seed)
+        save_cases(cases, args.output)
+        summary = dataset_summary(cases)
+        print(f"cases={summary['cases']} labels={summary['labels']} dataset={args.output}")
         return 0
 
     record = load_record(args.record)

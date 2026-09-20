@@ -30,6 +30,10 @@ Each model invocation includes:
 The controller selects the action with the highest binary probability. This keeps the action set
 small and uses Laya's strongest reported decision primitive.
 
+Generic Laya checkpoints are useful baselines, but they are not warehouse policies. The repository
+therefore generates its own balanced training states and provides a small domain fine-tuning path.
+No external package, incident, or robotics dataset is required.
+
 This repository is an experiment, not a certified robotics safety system.
 
 ## Architecture
@@ -60,6 +64,7 @@ python -m unittest discover -s tests
 
 laya-warehouse run --controller heuristic --headless --output results/heuristic.json
 laya-warehouse replay results/heuristic.json --headless
+laya-warehouse make-dataset --per-action 128 --output results/train.jsonl
 ```
 
 Install the visual renderer:
@@ -81,6 +86,17 @@ or a local checkpoint, and `--device` to select `cpu`, `cuda`, or `mps`.
 
 The recorder refuses to overwrite an existing result. Choose a new output path for each run.
 
+## Synthetic policy data
+
+`make-dataset` creates equal numbers of four situations:
+
+- Advance when the route toward the loading bay is clear.
+- Shift left or right when a stationary pallet blocks the route and the shift improves alignment.
+- Wait when moving cross-aisle traffic will enter the next cell.
+
+Every JSONL row contains the structured simulator state and its labeled best action. A seed makes
+the output reproducible, and a separate seed produces held-out evaluation states.
+
 ### DGX Spark container
 
 The container preserves NVIDIA's ARM64/Blackwell PyTorch build from the pinned NGC base image. It
@@ -94,10 +110,30 @@ docker compose run --rm simulation
 The first run downloads the Laya checkpoint into the `laya-cache` Docker volume and writes the
 episode to `results/laya-dgx.json`.
 
+Fine-tune the smaller Laya checkpoint on generated states, then run the learned policy:
+
+```sh
+docker compose run --rm --entrypoint python simulation \
+  scripts/train_laya_policy.py --output /results/laya-warehouse-model
+
+docker compose run --rm simulation run \
+  --controller laya \
+  --model /results/laya-warehouse-model \
+  --device cuda \
+  --headless \
+  --output /results/laya-finetuned-dgx.json
+```
+
+Training records baseline and per-epoch held-out accuracy in
+`results/laya-warehouse-model/training_metrics.json`. Both training and episode commands refuse to
+overwrite prior outputs.
+
 ## Current milestone
 
 - Deterministic crossing scenario with workers, a forklift, and a stationary pallet.
 - Structured observations suitable for Laya.
+- Balanced deterministic dataset generation with no external corpus.
+- Single-GPU domain fine-tuning with held-out action accuracy.
 - Heuristic, seeded-random, and Laya controllers.
 - Safety shield that records every overridden action.
 - JSON recording and deterministic replay verification.
@@ -105,7 +141,7 @@ episode to `results/laya-dgx.json`.
 - Pinned DGX Spark GPU container path.
 
 Planned work includes scenario files, real-time and delayed decision modes, probability overlays,
-benchmark summaries, and curated replay media.
+additional held-out scenarios, and curated replay media.
 
 ## License
 

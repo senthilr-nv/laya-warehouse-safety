@@ -18,9 +18,9 @@ RUN python -m venv --system-site-packages /opt/laya-warehouse-venv \
 
 COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
+COPY scripts ./scripts
 RUN python -m pip install --no-cache-dir --no-deps . \
     && python -c "import laya, torch; print('Laya:', laya.__version__, 'NVIDIA torch:', torch.__version__)"
 
 ENTRYPOINT ["laya-warehouse"]
 CMD ["--help"]
-

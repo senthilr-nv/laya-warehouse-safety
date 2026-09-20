@@ -140,7 +140,10 @@ class World:
 
         return {
             "tick": self.tick,
-            "task": "Reach the loading bay on row 0 without colliding with workers or forklifts.",
+            "task": (
+                "Reach the loading bay on row 0 without colliding with workers, forklifts, "
+                "or pallets."
+            ),
             "robot": {"column": self.robot_x, "row": self.robot_y},
             "goal": {"row": 0, "columns": list(self.goal_columns)},
             "candidate_moves": candidate_moves,
