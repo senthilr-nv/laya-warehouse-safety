@@ -113,4 +113,6 @@ This is simulator evidence, not a robotics safety claim.
 
 The follow-up [`compositional-coverage` diagnostic](compositional-coverage/README.md) has separate
 immutable manifests and a separate results namespace. It does not modify or replace any evidence
-described on this page.
+described on this page. Its coverage-trained checkpoint did not improve policy-only completion on
+held-out combined scenarios, but substantially improved shielded completion; see that report for
+the full mixed result and its limitations.

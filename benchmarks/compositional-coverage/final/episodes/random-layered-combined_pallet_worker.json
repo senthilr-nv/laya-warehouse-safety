@@ -1,0 +1,5081 @@
+{
+  "schema_version": 2,
+  "scenario": {
+    "scenario_id": "coverage-final-combined-000",
+    "family": "combined_pallet_worker",
+    "split": "coverage_final",
+    "width": 11,
+    "height": 9,
+    "robot_x": 3,
+    "robot_y": 8,
+    "goal_columns": [
+      4,
+      5,
+      6
+    ],
+    "actors": [
+      {
+        "actor_id": "pallet-final-000",
+        "kind": "pallet",
+        "x": 3,
+        "y": 1,
+        "dx": 0
+      },
+      {
+        "actor_id": "worker-final-000",
+        "kind": "worker",
+        "x": 2,
+        "y": 7,
+        "dx": 1
+      }
+    ]
+  },
+  "controller": "random",
+  "safety_shield": true,
+  "max_ticks": 40,
+  "outcome": "timeout",
+  "ticks": 40,
+  "frames": [
+    {
+      "before": {
+        "tick": 0,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 3,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 2,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 0,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 3,
+          "row": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 2,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0011,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 1,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 3,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 3,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "shift_right",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 1,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 3,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 3,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 1,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 3,
+          "row": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 3,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_right",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 2,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 4,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 4,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "shift_right",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 2,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 4,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 4,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 2,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 4,
+          "row": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 4,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0009,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "shift_left",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 3,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 3,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 5,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "wait",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 3,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 3,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 5,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 3,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 3,
+          "row": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 5,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_right",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 4,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 4,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 6,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 4,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 4,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 6,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 4,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 4,
+          "row": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 6,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 5,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 4,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 7,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 5,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 4,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 7,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 5,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 4,
+          "row": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 7,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0009,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_right",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 6,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 5,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 8,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 6,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 5,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 8,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 6,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 5,
+          "row": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 8,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 7,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 5,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 9,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 7,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 5,
+          "y": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 9,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 7,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 5,
+          "row": 8
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 9,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "advance",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "advance",
+        "applied_action": "advance",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 8,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 5,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 10,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 8,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 5,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 10,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 8,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 5,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 10,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_right",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 9,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 6,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 9,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 9,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 6,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 9,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 9,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 6,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 9,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 10,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 6,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 8,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 10,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 6,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 8,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 10,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 6,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 8,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "wait",
+        "safety_override": true,
+        "status": "running",
+        "reason": "safety shield replaced shift_right with wait: worker will enter target cell"
+      },
+      "after": {
+        "tick": 11,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 6,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 7,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "worker will enter target cell"
+      }
+    },
+    {
+      "before": {
+        "tick": 11,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 6,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 7,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 11,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 6,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 7,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_left",
+        "safety_override": true,
+        "status": "running",
+        "reason": "safety shield replaced shift_right with shift_left: worker occupies target cell"
+      },
+      "after": {
+        "tick": 12,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 5,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 6,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "worker occupies target cell"
+      }
+    },
+    {
+      "before": {
+        "tick": 12,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 5,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 6,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 12,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 5,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 6,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "shift_left",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 13,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 4,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 5,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 13,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 4,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 5,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 13,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 4,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 5,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_left",
+        "safety_override": true,
+        "status": "running",
+        "reason": "safety shield replaced shift_right with shift_left: worker occupies target cell"
+      },
+      "after": {
+        "tick": 14,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 3,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 4,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "worker occupies target cell"
+      }
+    },
+    {
+      "before": {
+        "tick": 14,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 3,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 4,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 14,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 3,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 4,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "shift_left",
+        "safety_override": true,
+        "status": "running",
+        "reason": "safety shield replaced wait with shift_left: worker will enter target cell"
+      },
+      "after": {
+        "tick": 15,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 2,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 3,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "worker will enter target cell"
+      }
+    },
+    {
+      "before": {
+        "tick": 15,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 2,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 3,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 15,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 2,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 3,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "shift_left",
+        "safety_override": true,
+        "status": "running",
+        "reason": "safety shield replaced wait with shift_left: worker will enter target cell"
+      },
+      "after": {
+        "tick": 16,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 2,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "worker will enter target cell"
+      }
+    },
+    {
+      "before": {
+        "tick": 16,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 2,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 16,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 1,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 2,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_left",
+        "safety_override": true,
+        "status": "running",
+        "reason": "safety shield replaced shift_right with shift_left: worker occupies target cell"
+      },
+      "after": {
+        "tick": 17,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 1,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "worker occupies target cell"
+      }
+    },
+    {
+      "before": {
+        "tick": 17,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 1,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 17,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 7
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 1,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "advance",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "advance",
+        "applied_action": "advance",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 18,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 0,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 18,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 0,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 18,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 0,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "wait",
+        "safety_override": true,
+        "status": "running",
+        "reason": "boundary guard replaced shift_left: outside warehouse grid"
+      },
+      "after": {
+        "tick": 19,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 1,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "outside warehouse grid"
+      }
+    },
+    {
+      "before": {
+        "tick": 19,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 1,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 19,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 1,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_right",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 20,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 2,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 20,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 2,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 20,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 1,
+          "row": 6
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 2,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "advance",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "advance",
+        "applied_action": "advance",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 21,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 5
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 3,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 21,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 5
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 3,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 21,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 1,
+          "row": 5
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 3,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "shift_left",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 22,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 5
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 4,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 22,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 5
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 4,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 22,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 5
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 4,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "advance",
+        "latency_ms": 0.0009,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "advance",
+        "applied_action": "advance",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 23,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 5,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 23,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 5,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 23,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 5,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "wait",
+        "safety_override": true,
+        "status": "running",
+        "reason": "boundary guard replaced shift_left: outside warehouse grid"
+      },
+      "after": {
+        "tick": 24,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 6,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "outside warehouse grid"
+      }
+    },
+    {
+      "before": {
+        "tick": 24,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 6,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 24,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 6,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "wait",
+        "safety_override": true,
+        "status": "running",
+        "reason": "boundary guard replaced shift_left: outside warehouse grid"
+      },
+      "after": {
+        "tick": 25,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 7,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "outside warehouse grid"
+      }
+    },
+    {
+      "before": {
+        "tick": 25,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 7,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 25,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 7,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "wait",
+        "safety_override": true,
+        "status": "running",
+        "reason": "boundary guard replaced shift_left: outside warehouse grid"
+      },
+      "after": {
+        "tick": 26,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 8,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": true,
+        "unsafe_reason": "outside warehouse grid"
+      }
+    },
+    {
+      "before": {
+        "tick": 26,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 8,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 26,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 8,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_right",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_right",
+        "applied_action": "shift_right",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 27,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 9,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 27,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 9,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 27,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 1,
+          "row": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 9,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 28,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 10,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 28,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 10,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 28,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 1,
+          "row": 4
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 10,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "advance",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "advance",
+        "applied_action": "advance",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 29,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 3
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 9,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 29,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 1,
+          "y": 3
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 9,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 29,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 1,
+          "row": 3
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 9,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0006,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "shift_left",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 30,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 3
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 8,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 30,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 3
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 8,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 30,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 3
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 8,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "advance",
+        "latency_ms": 0.0006,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "advance",
+        "applied_action": "advance",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 31,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 2
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 7,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": false,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 31,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 2
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 7,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 31,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 2
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 7,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 32,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 2
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 6,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 32,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 2
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 6,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 32,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 2
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 6,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "advance",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "advance",
+        "applied_action": "advance",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 33,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 1
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 5,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 33,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 1
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 5,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 33,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 1
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 5,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "advance",
+        "latency_ms": 0.0006,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "advance",
+        "applied_action": "advance",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 34,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 4,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "advance",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 34,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 4,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 34,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 4,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "wait",
+        "safety_override": true,
+        "status": "running",
+        "reason": "boundary guard replaced shift_left: outside warehouse grid"
+      },
+      "after": {
+        "tick": 35,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 3,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "shift_right",
+        "path_blocked": true,
+        "unsafe_request": true,
+        "unsafe_reason": "outside warehouse grid"
+      }
+    },
+    {
+      "before": {
+        "tick": 35,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 3,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 35,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 3,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "shift_left",
+        "latency_ms": 0.0008,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "shift_left",
+        "applied_action": "wait",
+        "safety_override": true,
+        "status": "running",
+        "reason": "boundary guard replaced shift_left: outside warehouse grid"
+      },
+      "after": {
+        "tick": 36,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 2,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "shift_right",
+        "path_blocked": true,
+        "unsafe_request": true,
+        "unsafe_reason": "outside warehouse grid"
+      }
+    },
+    {
+      "before": {
+        "tick": 36,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 2,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 36,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 2,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 37,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 1,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "shift_right",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 37,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 1,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 37,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 1,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 38,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 0,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "shift_right",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 38,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 0,
+            "y": 7,
+            "dx": -1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 38,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 0,
+            "row": 7,
+            "horizontal_velocity": -1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 39,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 1,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "shift_right",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    },
+    {
+      "before": {
+        "tick": 39,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 1,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "observation": {
+        "tick": 39,
+        "task": "Reach the loading bay on row 0 without colliding with workers, forklifts, or pallets.",
+        "layout": {
+          "width": 11,
+          "height": 9
+        },
+        "robot": {
+          "column": 0,
+          "row": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "id": "pallet-final-000",
+            "kind": "pallet",
+            "column": 3,
+            "row": 1,
+            "horizontal_velocity": 0
+          },
+          {
+            "id": "worker-final-000",
+            "kind": "worker",
+            "column": 1,
+            "row": 7,
+            "horizontal_velocity": 1
+          }
+        ]
+      },
+      "decision": {
+        "action": "wait",
+        "latency_ms": 0.0007,
+        "details": {
+          "policy": "seeded random"
+        }
+      },
+      "step": {
+        "requested_action": "wait",
+        "applied_action": "wait",
+        "safety_override": false,
+        "status": "running",
+        "reason": "clear now and next tick"
+      },
+      "after": {
+        "tick": 40,
+        "status": "running",
+        "width": 11,
+        "height": 9,
+        "robot": {
+          "x": 0,
+          "y": 0
+        },
+        "goal": {
+          "row": 0,
+          "columns": [
+            4,
+            5,
+            6
+          ]
+        },
+        "actors": [
+          {
+            "actor_id": "pallet-final-000",
+            "kind": "pallet",
+            "x": 3,
+            "y": 1,
+            "dx": 0
+          },
+          {
+            "actor_id": "worker-final-000",
+            "kind": "worker",
+            "x": 2,
+            "y": 7,
+            "dx": 1
+          }
+        ]
+      },
+      "evaluation": {
+        "oracle_action": "shift_right",
+        "path_blocked": true,
+        "unsafe_request": false,
+        "unsafe_reason": null
+      }
+    }
+  ],
+  "evaluation_included": true
+}

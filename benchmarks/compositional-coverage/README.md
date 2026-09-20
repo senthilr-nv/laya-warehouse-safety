@@ -1,7 +1,8 @@
 # Compositional-coverage diagnostic
 
-Status at manifest freeze: protocol registered; no new model had been trained and the final manifest
-had not been evaluated.
+The protocol and manifests were committed as `61413e8` before training. At that freeze point, no
+new model had been trained and the final manifest had not been evaluated. One train/dev run and one
+final comparison run were subsequently completed from that commit.
 
 This experiment tests one narrow hypothesis: the prior combined pallet-and-worker failure was
 primarily caused by missing combined-family training coverage rather than an inherent Laya
@@ -84,6 +85,101 @@ model inference will not be reproducible from this repository because neither ch
 will be published. The manifests, aggregate metrics, raw selected records, hashes, and deterministic
 replay verification will remain independently checkable.
 
+Final command, executed once after checkpoint selection:
+
+```sh
+python scripts/run_coverage_benchmark.py \
+  --baseline-model /results/laya-final-model-55f60f2 \
+  --coverage-model /results/compositional-coverage-v1/laya-combined-coverage-61413e8 \
+  --final-manifest benchmarks/compositional-coverage/manifests/final.json \
+  --implementation-commit 61413e8d4a42a4ff72e7b180f831ecc3fd9b455e \
+  --device cuda \
+  --max-ticks 40 \
+  --output /results/compositional-coverage-v1/final/report.json \
+  --episodes-dir /results/compositional-coverage-v1/final/episodes
+```
+
+## Training evidence
+
+Training produced 461 source states and 922 horizontally mirrored states. The dev set had 193
+states. Epoch 7 won the registered selection order with 0.6667 minimum action-label accuracy,
+0.8341 action macro accuracy, 0.9326 `path_blocked` accuracy, and 0.0624 Brier score. Training took
+535.16 seconds on the DGX Spark.
+
+- Coverage checkpoint weights SHA-256:
+  `f48d28b16208ecabedd6d165ccc65c7fa7a387fc7c0751a5c2d43995099b96a5`
+- Base checkpoint snapshot: `1c5edc17a7acd8701df6fc341c0d179f1c62c982`
+- Base weights SHA-256:
+  `891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c`
+- Training metrics SHA-256:
+  `90583751e797af6190c0918263882689d0be3e83c8bde515c4078dd3ad99e147`
+
+## Single final result
+
+The final manifest was executed once after epoch selection. The report's deterministic result
+digest is:
+
+```text
+76c46855490e0e6a5ea5314462575a4b503162cbae6ff5b310b13aa5ba87615d
+```
+
+### Overall outcomes
+
+| Controller | Track | Completion | Collision | Timeout | Unsafe request | Shield interventions | `path_blocked` accuracy | Brier |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Heuristic | Policy only | 87.5% | 0% | 12.5% | 0% | 0 | — | — |
+| Heuristic | Layered | 87.5% | 0% | 12.5% | 0% | 0 | — | — |
+| Preserved Laya baseline | Policy only | 25% | 71.88% | 3.12% | 36% | 0 | 56% | 0.3355 |
+| Coverage-trained Laya | Policy only | 18.75% | 81.25% | 0% | 27.27% | 0 | 75.76% | 0.1840 |
+| Preserved Laya baseline | Layered | 50% | 0% | 50% | 76.25% | 579 | 27.62% | 0.4848 |
+| Coverage-trained Laya | Layered | 87.5% | 0% | 12.5% | 8.27% | 46 | 53.6% | 0.3391 |
+| Seeded random | Policy only | 12.5% | 71.88% | 15.62% | 11.26% | 0 | — | — |
+| Seeded random | Layered | 46.88% | 0% | 53.12% | 9.72% | 46 | — | — |
+
+### Laya outcomes by family
+
+| Checkpoint | Family | Track | Completion | Collision | Timeout | Unsafe request | Shield interventions | `path_blocked` accuracy | Brier |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Baseline | Stationary | Policy only | 62.5% | 25% | 12.5% | 37.93% | 0 | 54.02% | 0.3554 |
+| Coverage | Stationary | Policy only | 37.5% | 62.5% | 0% | 14.29% | 0 | 74.29% | 0.2056 |
+| Baseline | Crossing | Policy only | 37.5% | 62.5% | 0% | 11.9% | 0 | 80.95% | 0.1729 |
+| Coverage | Crossing | Policy only | 37.5% | 62.5% | 0% | 13.95% | 0 | 65.12% | 0.2494 |
+| Baseline | Combined | Policy only | 0% | 100% | 0% | 76.19% | 0 | 14.29% | 0.5779 |
+| Coverage | Combined | Policy only | 0% | 100% | 0% | 76.19% | 0 | 100% | 0.0141 |
+| Baseline | Stationary | Layered | 87.5% | 0% | 12.5% | 33.33% | 5 | 62.96% | 0.2908 |
+| Coverage | Stationary | Layered | 100% | 0% | 0% | 9.88% | 8 | 88.89% | 0.0968 |
+| Baseline | Crossing | Layered | 100% | 0% | 0% | 8.64% | 7 | 87.65% | 0.1175 |
+| Coverage | Crossing | Layered | 100% | 0% | 0% | 8.33% | 7 | 79.76% | 0.1504 |
+| Baseline | Combined | Layered | 6.25% | 0% | 93.75% | 92.8% | 567 | 13.42% | 0.5678 |
+| Coverage | Combined | Layered | 75% | 0% | 25% | 7.93% | 31 | 40.66% | 0.4298 |
+
+`path_blocked` is measured on each controller's visited states. Different policies can visit
+different state distributions, especially after shield intervention, so cross-controller Brier and
+accuracy comparisons are descriptive rather than a shared fixed-state calibration test.
+
+### Runtime
+
+| Checkpoint | Model load | First inference | Warm count | Warm p50 | Warm p95 |
+|---|---:|---:|---:|---:|---:|
+| Baseline | 7,784.3661 ms | 535.2003 ms | 949 | 27.2160 ms | 28.4222 ms |
+| Coverage | 5,784.5387 ms | 28.1142 ms | 654 | 27.0143 ms | 28.0897 ms |
+
+The baseline was loaded and evaluated first, so the first-inference figures include different GPU
+warm-up states and are not a controlled cold-latency comparison. Warm latency is nearly unchanged.
+
+## Evidence
+
+- [`development/training_metrics.json`](development/training_metrics.json) — complete train/dev
+  history and checkpoint selection.
+- [`final/report.json`](final/report.json) — aggregate and per-episode final metrics, provenance,
+  model hashes, and runtime evidence.
+- [`final/episodes/`](final/episodes/) — 24 portable, deterministic replay records covering every
+  controller, track, and family.
+
+The report file SHA-256 is
+`474f85e2b03682cfae12141967df178e74758359a90970e77e6937fd2b1b7061`. All 24 selected records
+passed deterministic replay verification after transfer from the DGX Spark.
+
 ## Interpretation rule
 
 - A large improvement by the coverage checkpoint on held-out combined geometries supports the
@@ -91,3 +187,23 @@ replay verification will remain independently checkable.
 - Little or no improvement points toward representation, objective, or planning limitations.
 - Either outcome remains synthetic evidence and cannot support a warehouse-safety, broad
   generalization, or fundamental Laya-capability claim.
+
+## Interpretation
+
+The simple form of the hypothesis is not supported for the policy acting alone. On held-out
+combined scenarios, both checkpoints completed 0% and collided in 100% of policy-only episodes.
+The coverage checkpoint made `path_blocked` much more accurate on those short trajectories, but
+that signal did not produce a successful action policy. Policy-only performance also regressed on
+the stationary family.
+
+Training coverage did materially change the layered system. On combined scenarios with the
+unchanged shield, completion increased from 6.25% to 75%, timeout fell from 93.75% to 25%, and
+shield interventions fell from 567 to 31. This supports a narrower conclusion: combined examples
+helped the model produce behavior that the deterministic shield could recover into successful
+routes. Those completions remain shield-dependent and do not demonstrate a collision-safe learned
+policy.
+
+The mixed outcome points beyond data coverage alone toward action representation, training
+objective, sequential planning, or interference between scenario families. This single synthetic
+diagnostic cannot distinguish those explanations and does not establish an inherent limitation or
+fundamental capability of Laya.
