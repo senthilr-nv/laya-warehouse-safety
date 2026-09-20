@@ -86,6 +86,15 @@ or a local checkpoint, and `--device` to select `cpu`, `cuda`, or `mps`.
 
 The recorder refuses to overwrite an existing result. Choose a new output path for each run.
 
+## Recorded visual replay
+
+Clone the repository and open [`demo/index.html`](demo/index.html) in a browser. The self-contained
+viewer replays the verified DGX Spark episode without a server. It shows the warehouse state,
+requested and applied actions, action probabilities, latency, and every safety override by tick.
+
+The included record is data, not a scripted animation. Use the controls or arrow keys to inspect
+the proactive pallet detour and the later worker-traffic interventions.
+
 ## Synthetic policy data
 
 `make-dataset` creates equal numbers of four situations:
@@ -128,6 +137,21 @@ Training records baseline and per-epoch held-out accuracy in
 `results/laya-warehouse-model/training_metrics.json`. Both training and episode commands refuse to
 overwrite prior outputs.
 
+## Measured DGX Spark run
+
+The included replay was produced from commit `829c16a` on a DGX Spark:
+
+- 512 balanced simulator-generated training states and 128 held-out states.
+- Action accuracy improved from 25% zero-shot to 100% on the held-out synthetic split.
+- Three epochs completed in 75.83 seconds; the best checkpoint was epoch 2.
+- The robot completed the crossing in 17 ticks.
+- Laya requested the pallet detour itself with 71.86% probability.
+- Median inference latency was 58.2 ms; the 816.5 ms maximum includes cold model startup.
+- The safety shield made three moving-worker interventions and no pallet intervention.
+
+The held-out states come from the same deterministic generator family. These numbers demonstrate
+the software path and domain specialization; they are not evidence of real-world robot safety.
+
 ## Current milestone
 
 - Deterministic crossing scenario with workers, a forklift, and a stationary pallet.
@@ -138,6 +162,7 @@ overwrite prior outputs.
 - Safety shield that records every overridden action.
 - JSON recording and deterministic replay verification.
 - Optional Pygame visualization.
+- Browser-based replay of the recorded DGX Spark run.
 - Pinned DGX Spark GPU container path.
 
 Planned work includes scenario files, real-time and delayed decision modes, probability overlays,

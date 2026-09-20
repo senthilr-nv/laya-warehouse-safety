@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laya Warehouse Safety Replay</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0c111b;
+        --panel: #131b29;
+        --panel-strong: #192438;
+        --line: #2c3a50;
+        --text: #eef4ff;
+        --muted: #9aabc2;
+        --green: #77c66e;
+        --blue: #68a9ef;
+        --orange: #f2a94e;
+        --brown: #9e7862;
+        --red: #ed6b72;
+        --yellow: #f2d15f;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top left, #172237 0, var(--bg) 45%);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button, input { font: inherit; }
+      button:focus-visible, input:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+      .shell { width: min(1180px, 100%); margin: 0 auto; padding: 28px; }
+      .eyebrow { color: var(--green); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+      h1 { margin: 6px 0 4px; font-size: clamp(28px, 4vw, 48px); line-height: 1.05; }
+      .subtitle { margin: 0; color: var(--muted); }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin: 22px 0;
+      }
+      .metric, .panel {
+        background: color-mix(in srgb, var(--panel) 94%, transparent);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .metric { padding: 14px 16px; }
+      .metric span { display: block; color: var(--muted); font-size: 12px; }
+      .metric strong { display: block; margin-top: 4px; font-size: 21px; font-variant-numeric: tabular-nums; }
+
+      .workspace { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(300px, .8fr); gap: 18px; }
+      .panel { padding: 18px; }
+      .panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+      .panel-title h2 { margin: 0; font-size: 18px; }
+      .tick { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+      .warehouse {
+        display: grid;
+        aspect-ratio: 11 / 9;
+        border: 1px solid var(--line);
+        background: #0d1522;
+        overflow: hidden;
+      }
+      .cell {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-width: 0;
+        border-right: 1px solid #1f2b3d;
+        border-bottom: 1px solid #1f2b3d;
+      }
+      .cell.goal { background: color-mix(in srgb, var(--green) 13%, transparent); }
+      .cell.goal::before {
+        content: "BAY";
+        position: absolute;
+        top: 3px;
+        color: var(--green);
+        font-size: clamp(7px, 1vw, 10px);
+        letter-spacing: .08em;
+      }
+      .cell.trail::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #394c67; }
+
+      .entity {
+        position: absolute;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        width: 54%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        color: #07101b;
+        font-size: clamp(10px, 1.3vw, 15px);
+        font-weight: 800;
+        box-shadow: 0 7px 18px #0008;
+      }
+      .robot { width: 62%; border-radius: 9px; background: var(--green); }
+      .worker { background: var(--blue); }
+      .forklift { width: 66%; border-radius: 8px; background: var(--orange); }
+      .pallet { width: 60%; border-radius: 5px; background: var(--brown); color: var(--text); }
+
+      .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; color: var(--muted); font-size: 12px; }
+      .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--legend); }
+
+      .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .decision-box { padding: 12px; background: var(--panel-strong); border-radius: 10px; }
+      .decision-box span { display: block; color: var(--muted); font-size: 12px; }
+      .decision-box strong { display: block; margin-top: 4px; text-transform: capitalize; }
+      .override strong { color: var(--yellow); }
+
+      .probabilities { margin: 18px 0; }
+      .prob-row { display: grid; grid-template-columns: 88px 1fr 48px; align-items: center; gap: 9px; margin: 10px 0; }
+      .prob-label { color: var(--muted); font-size: 12px; text-transform: capitalize; }
+      .track { height: 9px; border-radius: 99px; background: #28364a; overflow: hidden; }
+      .fill { height: 100%; background: var(--blue); transition: width 180ms ease; }
+      .prob-row.selected .fill { background: var(--green); }
+      .prob-row.selected .prob-label { color: var(--text); }
+      .prob-value { text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; }
+
+      .reason { min-height: 58px; padding: 12px; color: var(--muted); background: #0e1623; border-radius: 10px; line-height: 1.4; }
+      .reason.danger { color: #ffd9dc; background: color-mix(in srgb, var(--red) 13%, #0e1623); }
+
+      .controls { display: grid; grid-template-columns: auto auto auto 1fr; gap: 8px; align-items: center; margin-top: 16px; }
+      .controls button {
+        min-height: 40px;
+        padding: 8px 13px;
+        color: var(--text);
+        background: var(--panel-strong);
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        cursor: pointer;
+      }
+      .controls button.primary { color: #07101b; background: var(--green); border-color: var(--green); font-weight: 700; }
+      .controls input { width: 100%; accent-color: var(--green); }
+      .footer { margin-top: 14px; color: var(--muted); font-size: 12px; }
+
+      @media (max-width: 800px) {
+        .shell { padding: 18px; }
+        .metrics { grid-template-columns: 1fr 1fr; }
+        .workspace { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 460px) {
+        .metrics { grid-template-columns: 1fr; }
+        .controls { grid-template-columns: 1fr 1fr 1fr; }
+        .controls input { grid-column: 1 / -1; }
+      }
+      @media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
+    </style>
+    <script src="record.js"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <div class="eyebrow">Recorded on DGX Spark</div>
+      <h1>Laya warehouse safety replay</h1>
+      <p class="subtitle">Model decisions, deterministic intervention, and the route to the loading bay.</p>
+
+      <section class="metrics" aria-label="Run summary">
+        <div class="metric"><span>Outcome</span><strong id="outcome">—</strong></div>
+        <div class="metric"><span>Episode</span><strong id="episodeTicks">—</strong></div>
+        <div class="metric"><span>Safety overrides</span><strong id="overrideCount">—</strong></div>
+        <div class="metric"><span>Median inference</span><strong id="medianLatency">—</strong></div>
+      </section>
+
+      <section class="workspace">
+        <div class="panel">
+          <div class="panel-title"><h2>Warehouse floor</h2><div class="tick" id="tickLabel">Tick 0</div></div>
+          <div id="warehouse" class="warehouse" role="img" aria-label="Top-down warehouse grid"></div>
+          <div class="legend" aria-label="Map legend">
+            <span style="--legend: var(--green)">Robot</span>
+            <span style="--legend: var(--blue)">Worker</span>
+            <span style="--legend: var(--orange)">Forklift</span>
+            <span style="--legend: var(--brown)">Pallet</span>
+          </div>
+        </div>
+
+        <aside class="panel" aria-live="polite">
+          <div class="panel-title"><h2>Decision audit</h2><div class="tick" id="latency">—</div></div>
+          <div class="decision-grid">
+            <div class="decision-box"><span>Requested</span><strong id="requested">—</strong></div>
+            <div class="decision-box" id="appliedBox"><span>Applied</span><strong id="applied">—</strong></div>
+          </div>
+          <div id="probabilities" class="probabilities"></div>
+          <div id="reason" class="reason">Ready.</div>
+          <div class="controls" aria-label="Replay controls">
+            <button id="previous" type="button">Previous</button>
+            <button id="play" class="primary" type="button">Play</button>
+            <button id="next" type="button">Next</button>
+            <input id="timeline" type="range" min="0" value="0" aria-label="Replay tick">
+          </div>
+          <div class="footer">Arrow keys step through the replay. Space starts or pauses playback.</div>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      const record = window.WAREHOUSE_REPLAY;
+      const frames = record.frames;
+      const labels = {
+        advance: "advance",
+        shift_left: "shift left",
+        shift_right: "shift right",
+        wait: "wait"
+      };
+      let index = 0;
+      let timer = null;
+
+      const warehouse = document.getElementById("warehouse");
+      const timeline = document.getElementById("timeline");
+      timeline.max = frames.length;
+
+      const latencies = frames.map(frame => frame.decision.latency_ms).sort((a, b) => a - b);
+      const median = latencies[Math.floor(latencies.length / 2)];
+      const overrides = frames.filter(frame => frame.step.safety_override).length;
+      document.getElementById("outcome").textContent = record.outcome;
+      document.getElementById("episodeTicks").textContent = `${record.ticks} ticks`;
+      document.getElementById("overrideCount").textContent = overrides;
+      document.getElementById("medianLatency").textContent = `${median.toFixed(1)} ms`;
+
+      function stateAt(position) {
+        return position === frames.length ? frames.at(-1).after : frames[position].before;
+      }
+
+      function decisionAt(position) {
+        return frames[Math.min(position, frames.length - 1)];
+      }
+
+      function addEntity(cells, x, y, kind, text, title) {
+        const entity = document.createElement("span");
+        entity.className = `entity ${kind}`;
+        entity.textContent = text;
+        entity.setAttribute("aria-label", title);
+        cells[y * 11 + x].appendChild(entity);
+      }
+
+      function renderGrid(state) {
+        warehouse.replaceChildren();
+        warehouse.style.gridTemplateColumns = `repeat(${state.width}, 1fr)`;
+        const cells = [];
+        const visited = new Set(
+          frames.slice(0, index).map(frame => `${frame.before.robot.x},${frame.before.robot.y}`)
+        );
+        for (let y = 0; y < state.height; y += 1) {
+          for (let x = 0; x < state.width; x += 1) {
+            const cell = document.createElement("div");
+            cell.className = "cell";
+            if (y === state.goal.row && state.goal.columns.includes(x)) cell.classList.add("goal");
+            if (visited.has(`${x},${y}`)) cell.classList.add("trail");
+            cells.push(cell);
+            warehouse.appendChild(cell);
+          }
+        }
+        state.actors.forEach(actor => {
+          const short = actor.kind === "worker" ? "W" : actor.kind === "forklift" ? "F" : "P";
+          addEntity(cells, actor.x, actor.y, actor.kind, short, `${actor.kind} at ${actor.x}, ${actor.y}`);
+        });
+        addEntity(cells, state.robot.x, state.robot.y, "robot", "R", `robot at ${state.robot.x}, ${state.robot.y}`);
+      }
+
+      function renderDecision(frame, finalState) {
+        const request = frame.decision.action;
+        const applied = frame.step.applied_action;
+        document.getElementById("requested").textContent = labels[request];
+        document.getElementById("applied").textContent = labels[applied];
+        document.getElementById("latency").textContent = `${frame.decision.latency_ms.toFixed(1)} ms`;
+        document.getElementById("tickLabel").textContent = finalState ? `Tick ${frames.length} · final` : `Tick ${index}`;
+
+        const appliedBox = document.getElementById("appliedBox");
+        appliedBox.classList.toggle("override", frame.step.safety_override);
+        const reason = document.getElementById("reason");
+        reason.textContent = finalState ? "Robot reached the loading bay." : frame.step.reason;
+        reason.classList.toggle("danger", frame.step.safety_override);
+
+        const probabilityRoot = document.getElementById("probabilities");
+        probabilityRoot.replaceChildren();
+        Object.entries(frame.decision.action_scores).forEach(([action, probability]) => {
+          const row = document.createElement("div");
+          row.className = `prob-row${action === request ? " selected" : ""}`;
+          row.innerHTML = `
+            <div class="prob-label">${labels[action]}</div>
+            <div class="track"><div class="fill" style="width:${(probability * 100).toFixed(1)}%"></div></div>
+            <div class="prob-value">${(probability * 100).toFixed(1)}%</div>`;
+          probabilityRoot.appendChild(row);
+        });
+      }
+
+      function render() {
+        const state = stateAt(index);
+        const finalState = index === frames.length;
+        renderGrid(state);
+        renderDecision(decisionAt(index), finalState);
+        timeline.value = index;
+        document.getElementById("previous").disabled = index === 0;
+        document.getElementById("next").disabled = finalState;
+      }
+
+      function pause() {
+        if (timer) window.clearInterval(timer);
+        timer = null;
+        document.getElementById("play").textContent = "Play";
+      }
+
+      function togglePlay() {
+        if (timer) { pause(); return; }
+        if (index === frames.length) index = 0;
+        document.getElementById("play").textContent = "Pause";
+        timer = window.setInterval(() => {
+          index += 1;
+          render();
+          if (index === frames.length) pause();
+        }, 700);
+      }
+
+      document.getElementById("previous").addEventListener("click", () => { pause(); index = Math.max(0, index - 1); render(); });
+      document.getElementById("next").addEventListener("click", () => { pause(); index = Math.min(frames.length, index + 1); render(); });
+      document.getElementById("play").addEventListener("click", togglePlay);
+      timeline.addEventListener("input", event => { pause(); index = Number(event.target.value); render(); });
+      document.addEventListener("keydown", event => {
+        if (event.target.matches("input, button")) return;
+        if (event.key === "ArrowLeft") { pause(); index = Math.max(0, index - 1); render(); }
+        if (event.key === "ArrowRight") { pause(); index = Math.min(frames.length, index + 1); render(); }
+        if (event.code === "Space") { event.preventDefault(); togglePlay(); }
+      });
+
+      render();
+    </script>
+  </body>
+</html>
