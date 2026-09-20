@@ -14,6 +14,8 @@ must reach a loading bay while choosing whether to advance, shift, or wait.
 The simulation keeps emergency collision prevention deterministic. Laya chooses operational
 actions above that safety layer; it cannot override the safety shield.
 
+![Laya warehouse safety replay showing the proactive pallet detour](demo/preview.png)
+
 ## Why this experiment?
 
 Laya evaluates several typed questions over one state in a single model invocation. A warehouse

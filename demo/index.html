@@ -34,13 +34,18 @@
       button:focus-visible, input:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 
       .shell { width: min(1180px, 100%); margin: 0 auto; padding: 28px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+      .brand { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+      .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; color: #07101b; background: var(--green); font-weight: 800; letter-spacing: -.04em; }
+      .verified { display: inline-flex; align-items: center; gap: 8px; color: var(--green); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+      .verified::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 14px var(--green); }
       .eyebrow { color: var(--green); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
       h1 { margin: 6px 0 4px; font-size: clamp(28px, 4vw, 48px); line-height: 1.05; }
       .subtitle { margin: 0; color: var(--muted); }
 
       .metrics {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 12px;
         margin: 22px 0;
       }
@@ -52,12 +57,28 @@
       .metric { padding: 14px 16px; }
       .metric span { display: block; color: var(--muted); font-size: 12px; }
       .metric strong { display: block; margin-top: 4px; font-size: 21px; font-variant-numeric: tabular-nums; }
+      .metric.featured strong { color: var(--green); }
 
       .workspace { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(300px, .8fr); gap: 18px; }
       .panel { padding: 18px; }
       .panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
       .panel-title h2 { margin: 0; font-size: 18px; }
       .tick { color: var(--muted); font-variant-numeric: tabular-nums; }
+      .layer-status { display: inline-flex; align-items: center; gap: 7px; color: var(--green); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+      .layer-status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+      .layer-status.override { color: var(--yellow); }
+
+      .moments { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+      .moments button {
+        padding: 6px 10px;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      .moments button.active { color: #07101b; background: var(--green); border-color: var(--green); }
 
       .warehouse {
         display: grid;
@@ -75,6 +96,7 @@
         border-bottom: 1px solid #1f2b3d;
       }
       .cell.goal { background: color-mix(in srgb, var(--green) 13%, transparent); }
+      .cell.aisle { background: color-mix(in srgb, var(--blue) 4%, #0d1522); }
       .cell.goal::before {
         content: "BAY";
         position: absolute;
@@ -121,6 +143,8 @@
       .prob-row.selected .prob-label { color: var(--text); }
       .prob-value { text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; }
 
+      .insight { min-height: 68px; margin-bottom: 9px; padding: 13px; color: var(--text); background: color-mix(in srgb, var(--green) 10%, var(--panel-strong)); border-left: 3px solid var(--green); border-radius: 4px 10px 10px 4px; line-height: 1.45; }
+      .insight.override { background: color-mix(in srgb, var(--yellow) 10%, var(--panel-strong)); border-left-color: var(--yellow); }
       .reason { min-height: 58px; padding: 12px; color: var(--muted); background: #0e1623; border-radius: 10px; line-height: 1.4; }
       .reason.danger { color: #ffd9dc; background: color-mix(in srgb, var(--red) 13%, #0e1623); }
 
@@ -140,10 +164,11 @@
 
       @media (max-width: 800px) {
         .shell { padding: 18px; }
-        .metrics { grid-template-columns: 1fr 1fr; }
+        .metrics { grid-template-columns: repeat(2, 1fr); }
         .workspace { grid-template-columns: 1fr; }
       }
       @media (max-width: 460px) {
+        .topbar { align-items: flex-start; flex-direction: column; }
         .metrics { grid-template-columns: 1fr; }
         .controls { grid-template-columns: 1fr 1fr 1fr; }
         .controls input { grid-column: 1 / -1; }
@@ -154,20 +179,31 @@
   </head>
   <body>
     <main class="shell">
-      <div class="eyebrow">Recorded on DGX Spark</div>
+      <div class="topbar">
+        <div class="brand"><span class="brand-mark">LY</span><span>Laya operational intelligence</span></div>
+        <div class="verified">Replay verified · DGX Spark</div>
+      </div>
+      <div class="eyebrow">System 1 decision audit</div>
       <h1>Laya warehouse safety replay</h1>
-      <p class="subtitle">Model decisions, deterministic intervention, and the route to the loading bay.</p>
+      <p class="subtitle">A learned operational policy above an independent deterministic safety layer.</p>
 
       <section class="metrics" aria-label="Run summary">
         <div class="metric"><span>Outcome</span><strong id="outcome">—</strong></div>
         <div class="metric"><span>Episode</span><strong id="episodeTicks">—</strong></div>
         <div class="metric"><span>Safety overrides</span><strong id="overrideCount">—</strong></div>
         <div class="metric"><span>Median inference</span><strong id="medianLatency">—</strong></div>
+        <div class="metric featured"><span>Synthetic holdout</span><strong>25 → 100%</strong></div>
       </section>
 
       <section class="workspace">
         <div class="panel">
           <div class="panel-title"><h2>Warehouse floor</h2><div class="tick" id="tickLabel">Tick 0</div></div>
+          <nav class="moments" aria-label="Key replay moments">
+            <button type="button" data-tick="0">Pallet detour</button>
+            <button type="button" data-tick="4">Worker stop</button>
+            <button type="button" data-tick="12">Forecast intervention</button>
+            <button type="button" data-tick="17">Arrival</button>
+          </nav>
           <div id="warehouse" class="warehouse" role="img" aria-label="Top-down warehouse grid"></div>
           <div class="legend" aria-label="Map legend">
             <span style="--legend: var(--green)">Robot</span>
@@ -178,12 +214,14 @@
         </div>
 
         <aside class="panel" aria-live="polite">
-          <div class="panel-title"><h2>Decision audit</h2><div class="tick" id="latency">—</div></div>
+          <div class="panel-title"><h2>Decision audit</h2><div id="layerStatus" class="layer-status">Policy applied</div></div>
+          <div class="tick" id="latency" style="margin: -8px 0 12px; text-align: right">—</div>
           <div class="decision-grid">
             <div class="decision-box"><span>Requested</span><strong id="requested">—</strong></div>
             <div class="decision-box" id="appliedBox"><span>Applied</span><strong id="applied">—</strong></div>
           </div>
           <div id="probabilities" class="probabilities"></div>
+          <div id="insight" class="insight">Ready.</div>
           <div id="reason" class="reason">Ready.</div>
           <div class="controls" aria-label="Replay controls">
             <button id="previous" type="button">Previous</button>
@@ -247,6 +285,7 @@
           for (let x = 0; x < state.width; x += 1) {
             const cell = document.createElement("div");
             cell.className = "cell";
+            if ([2, 4, 6].includes(y)) cell.classList.add("aisle");
             if (y === state.goal.row && state.goal.columns.includes(x)) cell.classList.add("goal");
             if (visited.has(`${x},${y}`)) cell.classList.add("trail");
             cells.push(cell);
@@ -270,8 +309,24 @@
 
         const appliedBox = document.getElementById("appliedBox");
         appliedBox.classList.toggle("override", frame.step.safety_override);
+        const layerStatus = document.getElementById("layerStatus");
+        layerStatus.textContent = frame.step.safety_override ? "Shield intervened" : "Policy applied";
+        layerStatus.classList.toggle("override", frame.step.safety_override);
+        const insight = document.getElementById("insight");
+        if (finalState) {
+          insight.textContent = "Mission complete: the robot reached the loading bay without collision.";
+        } else if (frame.step.safety_override) {
+          insight.textContent = `The independent safety shield replaced ${labels[request]} with ${labels[applied]} for moving traffic.`;
+        } else if (request === "shift_left" || request === "shift_right") {
+          insight.textContent = `Laya selected a proactive ${labels[request]} detour around the stationary pallet.`;
+        } else if (request === "wait") {
+          insight.textContent = "Laya held position while cross-aisle traffic cleared.";
+        } else {
+          insight.textContent = "Laya advanced toward the loading bay on a clear route.";
+        }
+        insight.classList.toggle("override", frame.step.safety_override);
         const reason = document.getElementById("reason");
-        reason.textContent = finalState ? "Robot reached the loading bay." : frame.step.reason;
+        reason.textContent = finalState ? "Recorded outcome: completed." : `Simulator: ${frame.step.reason}`;
         reason.classList.toggle("danger", frame.step.safety_override);
 
         const probabilityRoot = document.getElementById("probabilities");
@@ -318,12 +373,23 @@
       document.getElementById("next").addEventListener("click", () => { pause(); index = Math.min(frames.length, index + 1); render(); });
       document.getElementById("play").addEventListener("click", togglePlay);
       timeline.addEventListener("input", event => { pause(); index = Number(event.target.value); render(); });
+      document.querySelectorAll("[data-tick]").forEach(button => {
+        button.addEventListener("click", () => { pause(); index = Number(button.dataset.tick); render(); });
+      });
       document.addEventListener("keydown", event => {
         if (event.target.matches("input, button")) return;
         if (event.key === "ArrowLeft") { pause(); index = Math.max(0, index - 1); render(); }
         if (event.key === "ArrowRight") { pause(); index = Math.min(frames.length, index + 1); render(); }
         if (event.code === "Space") { event.preventDefault(); togglePlay(); }
       });
+
+      const originalRender = render;
+      render = function renderWithMomentState() {
+        originalRender();
+        document.querySelectorAll("[data-tick]").forEach(button => {
+          button.classList.toggle("active", Number(button.dataset.tick) === index);
+        });
+      };
 
       render();
     </script>
