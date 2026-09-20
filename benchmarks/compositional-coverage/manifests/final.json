@@ -1,0 +1,868 @@
+{
+  "experiment": "warehouse-compositional-coverage-v1",
+  "geometry_signature_digest": "ec2746f5ec06c44f96649a463a9fa19811d7be206e2d9675bdf57f710d55b6b8",
+  "manifest_schema_version": 1,
+  "role": "final",
+  "scenario_digest": "bb40999de39c6f921c5a960de4e9dee4be9a13aab351f2719441d9d0f1ae4bfe",
+  "scenarios": [
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-000",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 6
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-stationary-000",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-001",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 4,
+          "y": 7
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-stationary-001",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-002",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 5,
+          "y": 1
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-stationary-002",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-003",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 6,
+          "y": 6
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-stationary-003",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-004",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 6,
+          "y": 7
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-stationary-004",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-005",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 7,
+          "y": 1
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-stationary-005",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-006",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 7,
+          "y": 7
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-stationary-006",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-007",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 2,
+          "y": 1
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 2,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-stationary-007",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-final-crossing-000",
+          "dx": 1,
+          "kind": "worker",
+          "x": 10,
+          "y": 1
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        3
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-crossing-000",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-final-crossing-001",
+          "dx": -1,
+          "kind": "worker",
+          "x": 4,
+          "y": 1
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        3
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-crossing-001",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-final-crossing-002",
+          "dx": 1,
+          "kind": "worker",
+          "x": 6,
+          "y": 1
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        7
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-crossing-002",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-final-crossing-003",
+          "dx": -1,
+          "kind": "worker",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        7
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-crossing-003",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-final-crossing-004",
+          "dx": 1,
+          "kind": "worker",
+          "x": 2,
+          "y": 7
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        3
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-crossing-004",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-final-crossing-005",
+          "dx": 1,
+          "kind": "worker",
+          "x": 3,
+          "y": 7
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        4
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-crossing-005",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-final-crossing-006",
+          "dx": -1,
+          "kind": "worker",
+          "x": 7,
+          "y": 7
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-crossing-006",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-final-crossing-007",
+          "dx": -1,
+          "kind": "worker",
+          "x": 8,
+          "y": 7
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        7
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-crossing-007",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-000",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 1
+        },
+        {
+          "actor_id": "worker-final-000",
+          "dx": 1,
+          "kind": "worker",
+          "x": 2,
+          "y": 7
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-000",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-001",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 4,
+          "y": 1
+        },
+        {
+          "actor_id": "worker-final-001",
+          "dx": 1,
+          "kind": "worker",
+          "x": 3,
+          "y": 7
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-001",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-002",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 5,
+          "y": 1
+        },
+        {
+          "actor_id": "worker-final-002",
+          "dx": -1,
+          "kind": "worker",
+          "x": 6,
+          "y": 7
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-002",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-003",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 6,
+          "y": 1
+        },
+        {
+          "actor_id": "worker-final-003",
+          "dx": 1,
+          "kind": "worker",
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-003",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-004",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 7,
+          "y": 1
+        },
+        {
+          "actor_id": "worker-final-004",
+          "dx": 1,
+          "kind": "worker",
+          "x": 6,
+          "y": 7
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-004",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-005",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 6
+        },
+        {
+          "actor_id": "worker-final-005",
+          "dx": 1,
+          "kind": "worker",
+          "x": 10,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-005",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-006",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 4,
+          "y": 6
+        },
+        {
+          "actor_id": "worker-final-006",
+          "dx": 1,
+          "kind": "worker",
+          "x": 9,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-006",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-007",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 5,
+          "y": 6
+        },
+        {
+          "actor_id": "worker-final-007",
+          "dx": 1,
+          "kind": "worker",
+          "x": 8,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-007",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-008",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "actor_id": "worker-final-008",
+          "dx": 1,
+          "kind": "worker",
+          "x": 7,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-008",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-009",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 7,
+          "y": 6
+        },
+        {
+          "actor_id": "worker-final-009",
+          "dx": -1,
+          "kind": "worker",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-009",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-010",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 7
+        },
+        {
+          "actor_id": "worker-final-010",
+          "dx": -1,
+          "kind": "worker",
+          "x": 4,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-010",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-011",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 4,
+          "y": 7
+        },
+        {
+          "actor_id": "worker-final-011",
+          "dx": 1,
+          "kind": "worker",
+          "x": 9,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-011",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-012",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "actor_id": "worker-final-012",
+          "dx": -1,
+          "kind": "worker",
+          "x": 2,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-012",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-013",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 6,
+          "y": 7
+        },
+        {
+          "actor_id": "worker-final-013",
+          "dx": -1,
+          "kind": "worker",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-013",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-014",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 7,
+          "y": 7
+        },
+        {
+          "actor_id": "worker-final-014",
+          "dx": -1,
+          "kind": "worker",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-014",
+      "split": "coverage_final",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-final-015",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 6
+        },
+        {
+          "actor_id": "worker-final-015",
+          "dx": -1,
+          "kind": "worker",
+          "x": 4,
+          "y": 7
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-final-combined-015",
+      "split": "coverage_final",
+      "width": 11
+    }
+  ],
+  "split_rule": {
+    "combined_pallet_rows": [
+      1,
+      6,
+      7
+    ],
+    "geometry_signature": "grid, robot start, goal columns, stationary actor positions, and moving actor aisles; scenario and actor IDs are excluded",
+    "grid": {
+      "height": 9,
+      "robot_start_row": 8,
+      "width": 11
+    },
+    "moving_worker_rows": [
+      1,
+      7
+    ],
+    "scenarios": "8 stationary + 8 crossing + 16 combined",
+    "selection_constraint": "every geometry and worker trajectory signature is absent from train and dev",
+    "stationary_additional_robot_column": 2,
+    "stationary_pallet_rows": [
+      1,
+      6,
+      7
+    ],
+    "worker_trajectory_signature": "grid width, actor kind, initial column, aisle row, and horizontal velocity; IDs and episode seeds are excluded"
+  },
+  "worker_trajectory_signature_digest": "9ab0d9f08b6e21cac3a19e950e31d0761b2c4b9f59025ddb045d1800a7e2b773"
+}

@@ -167,6 +167,10 @@ def run_benchmark(
     max_ticks: int = 40,
     model_load_ms: dict[str, float] | None = None,
     evaluation_role: str = "final",
+    benchmark_name: str = "warehouse-compositional-ood-v1",
+    manifest_version: int = MANIFEST_VERSION,
+    training_families: tuple[str, ...] = ("stationary_pallet", "crossing_worker"),
+    held_out_family: str = "combined_pallet_worker",
 ) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     """Run every controller over the same manifests with and without the shield."""
 
@@ -254,7 +258,7 @@ def run_benchmark(
             "oracle_tie_break": [action.value for action in ORACLE_ACTION_ORDER],
         },
         "manifest": {
-            "version": MANIFEST_VERSION,
+            "version": manifest_version,
             "digest": manifest_digest(specs),
             "scenario_counts": dict(sorted(scenario_counts.items())),
             "scenario_ids": [spec.scenario_id for spec in specs],
@@ -264,10 +268,10 @@ def run_benchmark(
     canonical = json.dumps(deterministic_payload, sort_keys=True, separators=(",", ":"))
     report = {
         "report_schema_version": REPORT_SCHEMA_VERSION,
-        "benchmark": "warehouse-compositional-ood-v1",
+        "benchmark": benchmark_name,
         "evaluation_role": evaluation_role,
-        "training_families": ["stationary_pallet", "crossing_worker"],
-        "held_out_family": "combined_pallet_worker",
+        "training_families": list(training_families),
+        "held_out_family": held_out_family,
         **deterministic_payload,
         "deterministic_digest": hashlib.sha256(canonical.encode("utf-8")).hexdigest(),
         "runtime_evidence": runtime_evidence,

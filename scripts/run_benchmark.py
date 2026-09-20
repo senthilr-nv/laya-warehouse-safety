@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 
@@ -15,47 +14,9 @@ from laya_warehouse.benchmark import (
     selected_episode_filenames,
 )
 from laya_warehouse.controllers import HeuristicController, LayaController, RandomController
+from laya_warehouse.evidence import model_evidence
 from laya_warehouse.recording import save_record, verify_record
 from laya_warehouse.scenarios import development_manifest, final_benchmark_manifest
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as source:
-        for chunk in iter(lambda: source.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def model_evidence(model: str) -> dict:
-    evidence = {"identifier": model}
-    model_path = Path(model)
-    if not model_path.is_dir():
-        return evidence
-
-    weights_path = model_path / "model.safetensors"
-    config_path = model_path / "rl_agent_config.json"
-    metrics_path = model_path / "training_metrics.json"
-    if weights_path.is_file():
-        evidence["weights_sha256"] = sha256_file(weights_path)
-    if config_path.is_file():
-        config = json.loads(config_path.read_text(encoding="utf-8"))
-        evidence["fine_tuned"] = bool(config.get("fine_tuned"))
-        evidence["trained_questions"] = config.get("trained_questions")
-    if metrics_path.is_file():
-        metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
-        evidence["training"] = {
-            key: metrics.get(key)
-            for key in (
-                "base_model",
-                "seed",
-                "best_epoch",
-                "best_validation_selection",
-                "training_augmentation",
-                "training_loss_weighting",
-            )
-        }
-    return evidence
 
 
 def parse_args() -> argparse.Namespace:

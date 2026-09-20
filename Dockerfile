@@ -19,6 +19,7 @@ RUN python -m venv --system-site-packages /opt/laya-warehouse-venv \
 COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
 COPY scripts ./scripts
+COPY benchmarks/compositional-coverage/manifests ./benchmarks/compositional-coverage/manifests
 RUN python -m pip install --no-cache-dir --no-deps . \
     && python -c "import laya, torch; print('Laya:', laya.__version__, 'NVIDIA torch:', torch.__version__)"
 

@@ -6,12 +6,14 @@ import hashlib
 import json
 from dataclasses import asdict, dataclass
 from enum import Enum
+from pathlib import Path
 from typing import Any, Iterable
 
 from .model import Actor, World
 
 
 MANIFEST_VERSION = 2
+VERSIONED_MANIFEST_SCHEMA = 1
 
 
 class ScenarioFamily(str, Enum):
@@ -71,6 +73,19 @@ class ScenarioSpec:
             goal_columns=self.goal_columns,
             actors=[Actor(**asdict(actor)) for actor in self.actors],
         )
+
+
+@dataclass(frozen=True)
+class VersionedManifest:
+    """One checked-in experiment manifest with validated evidence digests."""
+
+    experiment: str
+    role: str
+    split_rule: dict[str, Any]
+    scenarios: tuple[ScenarioSpec, ...]
+    scenario_digest: str
+    geometry_signature_digest: str
+    worker_trajectory_signature_digest: str
 
 
 def _actor_x_after(*, start_x: int, dx: int, ticks: int, width: int) -> int:
@@ -313,3 +328,92 @@ def manifest_digest(specs: Iterable[ScenarioSpec] = FROZEN_MANIFEST) -> str:
     payload = [spec.to_dict() for spec in specs]
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def geometry_signature(spec: ScenarioSpec) -> tuple[Any, ...]:
+    """Describe static layout and moving-actor aisles without IDs or motion phase."""
+
+    fixed_actors = tuple(
+        sorted((actor.kind, actor.x, actor.y) for actor in spec.actors if actor.dx == 0)
+    )
+    moving_aisles = tuple(
+        sorted((actor.kind, actor.y) for actor in spec.actors if actor.dx != 0)
+    )
+    return (
+        spec.width,
+        spec.height,
+        spec.robot_x,
+        spec.robot_y,
+        spec.goal_columns,
+        fixed_actors,
+        moving_aisles,
+    )
+
+
+def worker_trajectory_signatures(spec: ScenarioSpec) -> tuple[tuple[Any, ...], ...]:
+    """Describe every moving actor's full deterministic bounce trajectory phase."""
+
+    return tuple(
+        sorted(
+            (spec.width, actor.kind, actor.x, actor.y, actor.dx)
+            for actor in spec.actors
+            if actor.dx != 0
+        )
+    )
+
+
+def _signature_set_digest(signatures: Iterable[tuple[Any, ...]]) -> str:
+    canonical = json.dumps(
+        sorted(set(signatures)),
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def geometry_signature_digest(specs: Iterable[ScenarioSpec]) -> str:
+    return _signature_set_digest(geometry_signature(spec) for spec in specs)
+
+
+def worker_trajectory_signature_digest(specs: Iterable[ScenarioSpec]) -> str:
+    signatures = (
+        signature
+        for spec in specs
+        for signature in worker_trajectory_signatures(spec)
+    )
+    return _signature_set_digest(signatures)
+
+
+def load_versioned_manifest(path: Path, *, expected_role: str | None = None) -> VersionedManifest:
+    """Load a checked-in manifest and reject changed scenarios or signatures."""
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("manifest_schema_version") != VERSIONED_MANIFEST_SCHEMA:
+        raise ValueError(f"unsupported manifest schema in {path}")
+    role = str(payload["role"])
+    if expected_role is not None and role != expected_role:
+        raise ValueError(f"expected {expected_role!r} manifest, got {role!r}")
+    scenarios = tuple(ScenarioSpec.from_dict(item) for item in payload["scenarios"])
+    if not scenarios:
+        raise ValueError(f"empty manifest: {path}")
+
+    computed = {
+        "scenario_digest": manifest_digest(scenarios),
+        "geometry_signature_digest": geometry_signature_digest(scenarios),
+        "worker_trajectory_signature_digest": worker_trajectory_signature_digest(scenarios),
+    }
+    for key, digest in computed.items():
+        if payload.get(key) != digest:
+            raise ValueError(f"{key} mismatch in {path}")
+
+    return VersionedManifest(
+        experiment=str(payload["experiment"]),
+        role=role,
+        split_rule=dict(payload["split_rule"]),
+        scenarios=scenarios,
+        scenario_digest=computed["scenario_digest"],
+        geometry_signature_digest=computed["geometry_signature_digest"],
+        worker_trajectory_signature_digest=computed[
+            "worker_trajectory_signature_digest"
+        ],
+    )

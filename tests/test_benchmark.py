@@ -125,6 +125,33 @@ class BenchmarkTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 save_benchmark_report(report, output)
 
+    def test_report_accepts_separate_diagnostic_identity(self) -> None:
+        report, _ = run_benchmark(
+            {"laya": lambda _scenario: OracleStubController()},
+            specs=representative_specs(),
+            benchmark_name="warehouse-compositional-coverage-v1",
+            manifest_version=1,
+            evaluation_role="coverage_final",
+            training_families=(
+                "stationary_pallet",
+                "crossing_worker",
+                "combined_pallet_worker",
+            ),
+            held_out_family="combined_pallet_worker signatures",
+        )
+
+        self.assertEqual(report["benchmark"], "warehouse-compositional-coverage-v1")
+        self.assertEqual(report["manifest"]["version"], 1)
+        self.assertEqual(report["evaluation_role"], "coverage_final")
+        self.assertEqual(
+            report["training_families"],
+            ["stationary_pallet", "crossing_worker", "combined_pallet_worker"],
+        )
+        self.assertEqual(
+            report["held_out_family"],
+            "combined_pallet_worker signatures",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

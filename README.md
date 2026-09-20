@@ -173,6 +173,12 @@ reported separately and are excluded from the deterministic digest.
 See [`benchmarks/README.md`](benchmarks/README.md) for the preserved development history, one-shot
 final results, and replay-verifiable evidence.
 
+The separately versioned
+[`compositional-coverage` diagnostic](benchmarks/compositional-coverage/README.md) tests whether a
+small amount of combined-family train/dev coverage changes performance on geometry- and
+trajectory-disjoint final scenarios. Its namespace and evidence remain separate from the prior
+one-shot benchmark.
+
 The simulator, manifests, metrics, and checked-in replays can be independently verified. The exact
 fine-tuned weights used by the final Laya run are not published, so that model inference run cannot
 be reproduced from this repository alone. The report records the weights SHA-256 for identity, not

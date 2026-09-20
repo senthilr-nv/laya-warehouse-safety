@@ -10,7 +10,7 @@ from typing import Any
 
 from .model import Action, World
 from .oracle import oracle_labels
-from .scenarios import manifest_digest, manifest_for_split
+from .scenarios import ScenarioSpec, manifest_digest, manifest_for_split
 
 
 def mirror_case(case: dict[str, Any]) -> dict[str, Any]:
@@ -43,11 +43,15 @@ def add_horizontal_mirrors(cases: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return cases + [mirror_case(case) for case in cases]
 
 
-def generate_cases(*, split: str = "train", max_ticks: int = 30) -> list[dict[str, Any]]:
-    """Roll out the oracle and label raw observations for one frozen split."""
+def generate_cases_for_specs(
+    specs: tuple[ScenarioSpec, ...],
+    *,
+    max_ticks: int = 30,
+) -> list[dict[str, Any]]:
+    """Roll out the oracle and label raw observations for explicit scenarios."""
 
     cases: list[dict[str, Any]] = []
-    for scenario in manifest_for_split(split):
+    for scenario in specs:
         world = scenario.build_world()
         while world.status == "running" and world.tick < max_ticks:
             labels = oracle_labels(world)
@@ -71,12 +75,26 @@ def generate_cases(*, split: str = "train", max_ticks: int = 30) -> list[dict[st
     return cases
 
 
-def dataset_summary(cases: list[dict[str, Any]]) -> dict[str, Any]:
+def generate_cases(*, split: str = "train", max_ticks: int = 30) -> list[dict[str, Any]]:
+    """Roll out the oracle and label raw observations for one legacy frozen split."""
+
+    return generate_cases_for_specs(manifest_for_split(split), max_ticks=max_ticks)
+
+
+def dataset_summary(
+    cases: list[dict[str, Any]],
+    *,
+    specs: tuple[ScenarioSpec, ...] | None = None,
+) -> dict[str, Any]:
     action_counts = Counter(case["labels"]["action"] for case in cases)
     path_counts = Counter(str(case["labels"]["path_blocked"]).lower() for case in cases)
     family_counts = Counter(case["family"] for case in cases)
     splits = sorted({case["split"] for case in cases})
-    specs = tuple(spec for split in splits for spec in manifest_for_split(split))
+    manifest_specs = (
+        specs
+        if specs is not None
+        else tuple(spec for split in splits for spec in manifest_for_split(split))
+    )
     return {
         "cases": len(cases),
         "splits": splits,
@@ -85,7 +103,7 @@ def dataset_summary(cases: list[dict[str, Any]]) -> dict[str, Any]:
             "action": dict(sorted(action_counts.items())),
             "path_blocked": dict(sorted(path_counts.items())),
         },
-        "manifest_digest": manifest_digest(specs),
+        "manifest_digest": manifest_digest(manifest_specs),
     }
 
 

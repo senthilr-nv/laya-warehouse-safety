@@ -20,14 +20,25 @@ from safetensors.torch import load_file, save_file
 from transformers import AutoTokenizer
 
 from laya_warehouse.controllers import LayaController
-from laya_warehouse.dataset import add_horizontal_mirrors, dataset_summary, generate_cases
+from laya_warehouse.dataset import (
+    add_horizontal_mirrors,
+    dataset_summary,
+    generate_cases,
+    generate_cases_for_specs,
+)
+from laya_warehouse.evidence import sha256_file
 from laya_warehouse.model import Action
+from laya_warehouse.scenarios import load_versioned_manifest
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", default="convaiinnovations/laya")
+    parser.add_argument("--model-revision")
     parser.add_argument("--output", type=Path, default=Path("results/laya-warehouse-model"))
+    parser.add_argument("--train-manifest", type=Path)
+    parser.add_argument("--dev-manifest", type=Path)
+    parser.add_argument("--implementation-commit")
     parser.add_argument("--max-ticks", type=int, default=30)
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-size", type=int, default=16)
@@ -37,8 +48,8 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_checkpoint(model_id: str, device: torch.device):
-    model_dir = snapshot_download(model_id)
+def load_checkpoint(model_id: str, device: torch.device, *, revision: str | None = None):
+    model_dir = snapshot_download(model_id, revision=revision)
     _fix_tokenizer_config(model_dir)
     with open(os.path.join(model_dir, "rl_agent_config.json"), encoding="utf-8") as source:
         cfg = json.load(source)
@@ -317,6 +328,8 @@ def main() -> int:
         raise RuntimeError("CUDA is required for policy fine-tuning")
     if args.output.exists():
         raise FileExistsError(f"refusing to overwrite existing model directory: {args.output}")
+    if bool(args.train_manifest) != bool(args.dev_manifest):
+        raise ValueError("--train-manifest and --dev-manifest must be provided together")
 
     random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -324,15 +337,69 @@ def main() -> int:
     torch.set_float32_matmul_precision("high")
     device = torch.device("cuda")
 
-    source_train_cases = generate_cases(split="train", max_ticks=args.max_ticks)
+    manifest_evidence = None
+    train_specs = None
+    dev_specs = None
+    if args.train_manifest and args.dev_manifest:
+        train_manifest = load_versioned_manifest(
+            args.train_manifest,
+            expected_role="train",
+        )
+        dev_manifest = load_versioned_manifest(args.dev_manifest, expected_role="dev")
+        if train_manifest.experiment != dev_manifest.experiment:
+            raise ValueError("train and dev manifests belong to different experiments")
+        train_specs = train_manifest.scenarios
+        dev_specs = dev_manifest.scenarios
+        source_train_cases = generate_cases_for_specs(
+            train_specs,
+            max_ticks=args.max_ticks,
+        )
+        eval_cases = generate_cases_for_specs(dev_specs, max_ticks=args.max_ticks)
+        manifest_evidence = {
+            "experiment": train_manifest.experiment,
+            "train": {
+                "path": str(args.train_manifest),
+                "scenario_digest": train_manifest.scenario_digest,
+                "geometry_signature_digest": train_manifest.geometry_signature_digest,
+                "worker_trajectory_signature_digest": (
+                    train_manifest.worker_trajectory_signature_digest
+                ),
+            },
+            "dev": {
+                "path": str(args.dev_manifest),
+                "scenario_digest": dev_manifest.scenario_digest,
+                "geometry_signature_digest": dev_manifest.geometry_signature_digest,
+                "worker_trajectory_signature_digest": (
+                    dev_manifest.worker_trajectory_signature_digest
+                ),
+            },
+        }
+    else:
+        source_train_cases = generate_cases(split="train", max_ticks=args.max_ticks)
+        eval_cases = generate_cases(split="validation", max_ticks=args.max_ticks)
     train_cases = add_horizontal_mirrors(source_train_cases)
-    eval_cases = generate_cases(split="validation", max_ticks=args.max_ticks)
-    print("source train dataset:", dataset_summary(source_train_cases), flush=True)
-    print("train dataset:", dataset_summary(train_cases), flush=True)
-    print("evaluation dataset:", dataset_summary(eval_cases), flush=True)
+    print(
+        "source train dataset:",
+        dataset_summary(source_train_cases, specs=train_specs),
+        flush=True,
+    )
+    print(
+        "train dataset:",
+        dataset_summary(train_cases, specs=train_specs),
+        flush=True,
+    )
+    print(
+        "evaluation dataset:",
+        dataset_summary(eval_cases, specs=dev_specs),
+        flush=True,
+    )
 
     started = time.time()
-    _, cfg, tokenizer, model = load_checkpoint(args.model, device)
+    model_dir, cfg, tokenizer, model = load_checkpoint(
+        args.model,
+        device,
+        revision=args.model_revision,
+    )
     dtype = amp_dtype(cfg.get("amp_dtype", "bf16"))
     if torch.cuda.get_device_capability(device)[0] < 8:
         dtype = torch.float16
@@ -420,10 +487,15 @@ def main() -> int:
 
     metrics = {
         "base_model": args.model,
+        "base_model_requested_revision": args.model_revision,
+        "base_model_resolved_snapshot": Path(model_dir).name,
+        "base_model_weights_sha256": sha256_file(Path(model_dir) / "model.safetensors"),
+        "implementation_commit": args.implementation_commit,
         "seed": args.seed,
-        "source_train_dataset": dataset_summary(source_train_cases),
-        "train_dataset": dataset_summary(train_cases),
-        "evaluation_dataset": dataset_summary(eval_cases),
+        "manifests": manifest_evidence,
+        "source_train_dataset": dataset_summary(source_train_cases, specs=train_specs),
+        "train_dataset": dataset_summary(train_cases, specs=train_specs),
+        "evaluation_dataset": dataset_summary(eval_cases, specs=dev_specs),
         "baseline": baseline,
         "epochs": epoch_metrics,
         "best_epoch": best_epoch,
@@ -435,8 +507,8 @@ def main() -> int:
             "lowest_path_blocked_brier",
         ],
         "validation_support_warning": (
-            "Lateral action labels have three cases each; report them as development evidence, "
-            "not stable recall estimates."
+            "Per-label development support is reported exactly. Treat checkpoint-selection "
+            "metrics as development evidence, not final evidence."
         ),
         "training_augmentation": "horizontal mirror",
         "training_loss_weighting": "inverse frequency by question and label",

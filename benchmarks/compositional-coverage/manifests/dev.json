@@ -1,0 +1,540 @@
+{
+  "experiment": "warehouse-compositional-coverage-v1",
+  "geometry_signature_digest": "4e706d11fab7460e743cddaeeb4d701c56afcb06dbaaf77971a898de146ca77c",
+  "manifest_schema_version": 1,
+  "role": "dev",
+  "scenario_digest": "162edfce1683c848657271eac2020924e505cd53e50d5c163b2c6f1dbf396293",
+  "scenarios": [
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-000-0",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 4
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-stationary_pallet-000",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-001-0",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-stationary_pallet-001",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-002-0",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-stationary_pallet-002",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-003-0",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 6,
+          "y": 5
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-stationary_pallet-003",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-004-0",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 7,
+          "y": 2
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-stationary_pallet-004",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-005-0",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 2
+        }
+      ],
+      "family": "stationary_pallet",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-stationary_pallet-005",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-dev-006-0",
+          "dx": 1,
+          "kind": "worker",
+          "x": 9,
+          "y": 2
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        5
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-crossing_worker-006",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-dev-007-0",
+          "dx": -1,
+          "kind": "worker",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-crossing_worker-007",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-dev-008-0",
+          "dx": -1,
+          "kind": "worker",
+          "x": 9,
+          "y": 3
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        4
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-crossing_worker-008",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-dev-009-0",
+          "dx": -1,
+          "kind": "worker",
+          "x": 0,
+          "y": 3
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        5
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-crossing_worker-009",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-dev-010-0",
+          "dx": 1,
+          "kind": "worker",
+          "x": 2,
+          "y": 4
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-crossing_worker-010",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "worker-dev-011-0",
+          "dx": -1,
+          "kind": "worker",
+          "x": 8,
+          "y": 4
+        }
+      ],
+      "family": "crossing_worker",
+      "goal_columns": [
+        4
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-crossing_worker-011",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-000",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 4
+        },
+        {
+          "actor_id": "worker-dev-000",
+          "dx": -1,
+          "kind": "worker",
+          "x": 9,
+          "y": 2
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-combined-000",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-001",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 4,
+          "y": 4
+        },
+        {
+          "actor_id": "worker-dev-001",
+          "dx": -1,
+          "kind": "worker",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 4,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-combined-001",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-002",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 5,
+          "y": 5
+        },
+        {
+          "actor_id": "worker-dev-002",
+          "dx": 1,
+          "kind": "worker",
+          "x": 9,
+          "y": 2
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-combined-002",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-003",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 6,
+          "y": 5
+        },
+        {
+          "actor_id": "worker-dev-003",
+          "dx": -1,
+          "kind": "worker",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 6,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-combined-003",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-004",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 7,
+          "y": 4
+        },
+        {
+          "actor_id": "worker-dev-004",
+          "dx": 1,
+          "kind": "worker",
+          "x": 8,
+          "y": 3
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-combined-004",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-005",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 3,
+          "y": 5
+        },
+        {
+          "actor_id": "worker-dev-005",
+          "dx": -1,
+          "kind": "worker",
+          "x": 2,
+          "y": 3
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 3,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-combined-005",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-006",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 5,
+          "y": 4
+        },
+        {
+          "actor_id": "worker-dev-006",
+          "dx": -1,
+          "kind": "worker",
+          "x": 0,
+          "y": 3
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 5,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-combined-006",
+      "split": "coverage_dev",
+      "width": 11
+    },
+    {
+      "actors": [
+        {
+          "actor_id": "pallet-dev-007",
+          "dx": 0,
+          "kind": "pallet",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "actor_id": "worker-dev-007",
+          "dx": 1,
+          "kind": "worker",
+          "x": 8,
+          "y": 3
+        }
+      ],
+      "family": "combined_pallet_worker",
+      "goal_columns": [
+        4,
+        5,
+        6
+      ],
+      "height": 9,
+      "robot_x": 7,
+      "robot_y": 8,
+      "scenario_id": "coverage-dev-combined-007",
+      "split": "coverage_dev",
+      "width": 11
+    }
+  ],
+  "split_rule": {
+    "base_scenarios": "physical layouts from legacy validation: 6 stationary + 6 crossing",
+    "combined_pallet_rows": [
+      4,
+      5
+    ],
+    "combined_robot_columns": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "combined_scenarios": 8,
+    "combined_worker_rows": [
+      2,
+      3
+    ],
+    "geometry_signature": "grid, robot start, goal columns, stationary actor positions, and moving actor aisles; scenario and actor IDs are excluded",
+    "grid": {
+      "height": 9,
+      "robot_start_row": 8,
+      "width": 11
+    },
+    "worker_trajectory_signature": "grid width, actor kind, initial column, aisle row, and horizontal velocity; IDs and episode seeds are excluded"
+  },
+  "worker_trajectory_signature_digest": "3b3f165095c1240cfc888162a5eb35538ddeddaf18fd3c0cc90a57ee9a3b8544"
+}
