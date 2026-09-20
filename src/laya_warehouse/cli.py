@@ -49,10 +49,14 @@ def _parser() -> argparse.ArgumentParser:
     replay.add_argument("--fps", type=int, default=4)
 
     dataset = subparsers.add_parser(
-        "make-dataset", help="generate balanced labeled simulator states"
+        "make-dataset", help="generate labeled states from a frozen scenario split"
     )
-    dataset.add_argument("--per-action", type=int, default=128)
-    dataset.add_argument("--seed", type=int, default=0)
+    dataset.add_argument(
+        "--split",
+        choices=("train", "validation", "iid_test", "ood_test"),
+        default="train",
+    )
+    dataset.add_argument("--max-ticks", type=int, default=30)
     dataset.add_argument("--output", type=Path, default=Path("results/train.jsonl"))
     return parser
 
@@ -75,7 +79,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     if args.command == "make-dataset":
-        cases = generate_cases(per_action=args.per_action, seed=args.seed)
+        cases = generate_cases(split=args.split, max_ticks=args.max_ticks)
         save_cases(cases, args.output)
         summary = dataset_summary(cases)
         print(f"cases={summary['cases']} labels={summary['labels']} dataset={args.output}")

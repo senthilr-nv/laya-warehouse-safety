@@ -22,7 +22,7 @@ Laya evaluates several typed questions over one state in a single model invocati
 crossing makes the result visible: a late or poor decision can cause an avoidable stop, detour, or
 collision in an unshielded research run.
 
-Each model invocation evaluates these outputs in parallel:
+The included browser replay evaluates these outputs in parallel:
 
 - `action` — `choice`: a normalized distribution over advance, shift left, shift right, and wait.
 - `collision_risk` — `score`: low through critical.
@@ -32,12 +32,15 @@ Each model invocation evaluates these outputs in parallel:
 The controller applies Laya's selected action. Keeping all actions in one normalized choice avoids
 comparing probabilities from separately phrased binary questions.
 
-The current domain training and evaluation cover only the `action` output. The replay preserves
-the other three outputs to demonstrate Laya's typed interface, but labels them as unvalidated
-diagnostics. Do not interpret them as calibrated warehouse risk or escalation signals.
+That replay's model was domain-trained only for `action`. It preserves the other three outputs to
+demonstrate Laya's typed interface, but they are unvalidated diagnostics. Do not interpret them as
+calibrated warehouse risk or escalation signals.
+
+The reproducible benchmark trains and evaluates only `action` and `path_blocked`. It does not train
+`collision_risk` or `needs_operator`, and makes no calibration claim about either one.
 
 Generic Laya checkpoints are useful baselines, but they are not warehouse policies. The repository
-therefore generates its own balanced training states and provides a small domain fine-tuning path.
+therefore generates its own frozen training states and provides a small domain fine-tuning path.
 No external package, incident, or robotics dataset is required.
 
 This repository is an experiment, not a certified robotics safety system.
@@ -70,7 +73,7 @@ python -m unittest discover -s tests
 
 laya-warehouse run --controller heuristic --headless --output results/heuristic.json
 laya-warehouse replay results/heuristic.json --headless
-laya-warehouse make-dataset --per-action 128 --output results/train.jsonl
+laya-warehouse make-dataset --split train --output results/train.jsonl
 ```
 
 Install the visual renderer:
@@ -102,16 +105,60 @@ forecasts, and every safety override by tick. Only the action distribution is do
 The included record is data, not a scripted animation. Use the controls or arrow keys to inspect
 the proactive pallet detour and the later worker-traffic interventions.
 
-## Synthetic policy data
+## Frozen scenarios and policy data
 
-`make-dataset` creates equal numbers of four situations:
+Version 1 has three immutable scenario families:
 
-- Advance when the route toward the loading bay is clear.
-- Shift left or right when a stationary pallet blocks the route and the shift improves alignment.
-- Wait when moving cross-aisle traffic will enter the next cell.
+| Family | Training | Validation | IID test | Compositional OOD test |
+|---|---:|---:|---:|---:|
+| Stationary pallet | 20 | 6 | 8 | 0 |
+| Crossing worker | 20 | 6 | 8 | 0 |
+| Combined pallet and worker | 0 | 0 | 0 | 16 |
 
-Every JSONL row contains the structured simulator state and its labeled best action. A seed makes
-the output reproducible, and a separate seed produces held-out evaluation states.
+The combined family is never used for training or checkpoint selection. It is held out entirely to
+measure whether behavior learned from the two single-hazard families composes.
+
+`make-dataset` rolls the deterministic oracle through one named split. Each JSONL row contains a
+raw simulator observation plus separate `action` and `path_blocked` labels. Model observations do
+not contain candidate safety, oracle actions, shield decisions, or labels.
+
+The oracle finds the shortest collision-free route. Equal-length routes minimize lateral moves,
+then waits, then use this fixed action order: advance, shift left, shift right, wait. The
+`path_blocked` label means that forward-only travel in the robot's current column becomes unsafe
+within the next three ticks under deterministic actor motion.
+
+Generate any frozen split with:
+
+```sh
+laya-warehouse make-dataset --split validation --output results/validation.jsonl
+```
+
+## Reproducible benchmark
+
+The benchmark runs fine-tuned Laya, the deterministic heuristic, and a seeded-random policy over
+the same IID and compositional OOD manifests. Every controller is measured twice:
+
+- `policy_only` disables collision shielding while retaining the grid boundary guard.
+- `layered` enables the deterministic collision shield.
+
+The versioned JSON report includes completion, collision, timeout, unsafe-request, boundary-guard,
+shield-intervention, unnecessary-wait, route-length, oracle-action, and `path_blocked` metrics by
+family.
+It also separates model load and first-inference latency from warm Laya p50 and p95 latency.
+Selected episodes from every controller, track, and family are saved as replay-verifiable JSON.
+
+Run it against a fine-tuned checkpoint:
+
+```sh
+python scripts/run_benchmark.py \
+  --model results/laya-warehouse-model \
+  --device cuda \
+  --output results/benchmark-v1.json \
+  --episodes-dir results/benchmark-v1-episodes
+```
+
+The report contains a manifest digest and a deterministic result digest. Runtime measurements are
+reported separately and are excluded from the deterministic digest.
 
 ### DGX Spark container
 
@@ -140,15 +187,15 @@ docker compose run --rm simulation run \
   --output /results/laya-finetuned-dgx.json
 ```
 
-Training records baseline and per-epoch held-out accuracy in
-`results/laya-warehouse-model/training_metrics.json`. Both training and episode commands refuse to
-overwrite prior outputs.
+Training records baseline and per-epoch validation accuracy for both trained questions in
+`results/laya-warehouse-model/training_metrics.json`. Training, benchmark, and episode commands
+refuse to overwrite prior outputs.
 
 ## Measured DGX Spark run
 
 The included replay was produced from commit `829c16a` on a DGX Spark:
 
-- 512 balanced simulator-generated training states and 128 held-out states.
+- 512 balanced simulator-generated action-training states and 128 held-out action states.
 - Action accuracy improved from 25% zero-shot to 100% on the held-out synthetic split.
 - Three epochs completed in 75.83 seconds; the best checkpoint was epoch 2.
 - The robot completed the crossing in 17 ticks.
@@ -156,8 +203,9 @@ The included replay was produced from commit `829c16a` on a DGX Spark:
 - Median inference latency was 58.2 ms; the 816.5 ms maximum includes cold model startup.
 - The safety shield made three moving-worker interventions and no pallet intervention.
 
-The held-out states come from the same deterministic generator family. These numbers demonstrate
-the software path and action specialization; they are not evidence of real-world robot safety.
+This older browser-replay run predates the frozen compositional benchmark above. Its held-out states
+come from the same deterministic generator family. These numbers demonstrate the software path and
+action specialization; they are not evidence of real-world robot safety.
 The three shield interventions also show that perfect accuracy on this generated action split does
 not imply a shield-free episode or a generally safe policy.
 
@@ -165,17 +213,21 @@ not imply a shield-free episode or a generally safe policy.
 
 - Deterministic crossing scenario with workers, a forklift, and a stationary pallet.
 - Structured observations suitable for Laya.
-- Balanced deterministic dataset generation with no external corpus.
-- Single-GPU domain fine-tuning with held-out action accuracy.
+- Frozen train, validation, IID, and compositional OOD scenario manifests.
+- Deterministic oracle labels with a tested route tie-break.
+- Leak-free `action` and `path_blocked` policy data with no external corpus.
+- Single-GPU domain fine-tuning with validation metrics for both trained questions.
 - Heuristic, seeded-random, and Laya controllers.
+- Policy-only and layered benchmark tracks with versioned JSON reports.
+- Replay-verifiable selected benchmark episodes.
 - Safety shield that records every overridden action.
 - JSON recording and deterministic replay verification.
 - Optional Pygame visualization.
 - Browser-based replay of the recorded DGX Spark run.
 - Pinned DGX Spark GPU container path.
 
-Planned work includes scenario files, real-time and delayed decision modes, probability overlays,
-additional held-out scenarios, and curated replay media.
+Planned work includes real-time and delayed decision modes, probability overlays, additional
+held-out scenarios, and curated replay media.
 
 ## License
 

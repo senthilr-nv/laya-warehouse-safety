@@ -84,6 +84,41 @@ class World:
             "actors": [asdict(actor) for actor in self.actors],
         }
 
+    def clone(self) -> World:
+        return World(
+            width=self.width,
+            height=self.height,
+            robot_x=self.robot_x,
+            robot_y=self.robot_y,
+            goal_columns=self.goal_columns,
+            actors=[Actor(**asdict(actor)) for actor in self.actors],
+            tick=self.tick,
+            status=self.status,
+        )
+
+    @classmethod
+    def from_observation(cls, observation: dict[str, Any]) -> World:
+        layout = observation["layout"]
+        robot = observation["robot"]
+        return cls(
+            width=int(layout["width"]),
+            height=int(layout["height"]),
+            robot_x=int(robot["column"]),
+            robot_y=int(robot["row"]),
+            goal_columns=tuple(int(value) for value in observation["goal"]["columns"]),
+            actors=[
+                Actor(
+                    actor_id=actor["id"],
+                    kind=actor["kind"],
+                    x=int(actor["column"]),
+                    y=int(actor["row"]),
+                    dx=int(actor["horizontal_velocity"]),
+                )
+                for actor in observation["actors"]
+            ],
+            tick=int(observation["tick"]),
+        )
+
     def _target(self, action: Action) -> tuple[int, int]:
         if action is Action.ADVANCE:
             return self.robot_x, self.robot_y - 1
@@ -111,32 +146,7 @@ class World:
         return {"safe": True, "reason": "clear now and next tick"}
 
     def observe(self) -> dict[str, Any]:
-        candidate_moves = {
-            action.value: self.move_safety(action)
-            for action in (Action.ADVANCE, Action.SHIFT_LEFT, Action.SHIFT_RIGHT, Action.WAIT)
-        }
-        hazards = []
-        for actor in self.actors:
-            distance = abs(actor.x - self.robot_x) + abs(actor.y - self.robot_y)
-            if distance <= 5:
-                next_x, next_y, _ = actor.forecast(self.width)
-                next_distance = abs(next_x - self.robot_x) + abs(next_y - self.robot_y)
-                hazards.append(
-                    {
-                        "id": actor.actor_id,
-                        "kind": actor.kind,
-                        "relative_column": actor.x - self.robot_x,
-                        "rows_ahead": self.robot_y - actor.y,
-                        "distance": "near" if distance <= 2 else "visible",
-                        "motion": (
-                            "stationary"
-                            if actor.dx == 0
-                            else "approaching"
-                            if next_distance < distance
-                            else "moving away"
-                        ),
-                    }
-                )
+        """Return raw state only; policy labels and safety conclusions stay private."""
 
         return {
             "tick": self.tick,
@@ -144,10 +154,19 @@ class World:
                 "Reach the loading bay on row 0 without colliding with workers, forklifts, "
                 "or pallets."
             ),
+            "layout": {"width": self.width, "height": self.height},
             "robot": {"column": self.robot_x, "row": self.robot_y},
             "goal": {"row": 0, "columns": list(self.goal_columns)},
-            "candidate_moves": candidate_moves,
-            "visible_hazards": hazards,
+            "actors": [
+                {
+                    "id": actor.actor_id,
+                    "kind": actor.kind,
+                    "column": actor.x,
+                    "row": actor.y,
+                    "horizontal_velocity": actor.dx,
+                }
+                for actor in self.actors
+            ],
         }
 
     def step(self, requested: Action, *, safety_shield: bool = True) -> StepResult:

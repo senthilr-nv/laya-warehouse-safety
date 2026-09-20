@@ -7,7 +7,7 @@ import time
 from dataclasses import dataclass
 from typing import Any, Protocol
 
-from .model import Action
+from .model import Action, World
 
 
 @dataclass
@@ -30,7 +30,7 @@ class HeuristicController:
 
     def decide(self, observation: dict[str, Any]) -> Decision:
         start = time.perf_counter()
-        moves = observation["candidate_moves"]
+        world = World.from_observation(observation)
         robot_x = observation["robot"]["column"]
         goal_columns = observation["goal"]["columns"]
 
@@ -41,7 +41,7 @@ class HeuristicController:
             preferences.insert(0, Action.SHIFT_LEFT)
         preferences.extend([Action.SHIFT_LEFT, Action.SHIFT_RIGHT, Action.WAIT])
 
-        action = next(action for action in preferences if moves[action.value]["safe"])
+        action = next(action for action in preferences if world.move_safety(action)["safe"])
         latency_ms = (time.perf_counter() - start) * 1000
         return Decision(action, latency_ms, {"policy": "first safe preferred move"})
 
@@ -85,7 +85,10 @@ class LayaController:
         },
         "path_blocked": {
             "type": "noul",
-            "instructions": "Is the direct path toward the loading bay blocked?",
+            "instructions": (
+                "Is forward-only travel in the robot's current column blocked within the next "
+                "three ticks under the listed actor motion?"
+            ),
         },
         "needs_operator": {
             "type": "noul",
@@ -93,7 +96,18 @@ class LayaController:
         },
     }
 
-    def __init__(self, model: str = "convaiinnovations/laya", device: str | None = None):
+    BENCHMARK_QUESTIONS = {
+        "action": QUESTIONS["action"],
+        "path_blocked": QUESTIONS["path_blocked"],
+    }
+
+    def __init__(
+        self,
+        model: str = "convaiinnovations/laya",
+        device: str | None = None,
+        *,
+        questions: dict[str, dict[str, Any]] | None = None,
+    ):
         try:
             import laya
         except ImportError as exc:
@@ -101,11 +115,15 @@ class LayaController:
                 "The Laya controller requires the optional dependency. "
                 "Install with: pip install -e '.[laya]'"
             ) from exc
+        started = time.perf_counter()
         self._agent = laya.load(model, device=device)
+        self.model_load_ms = (time.perf_counter() - started) * 1000
+        self._questions = questions or self.QUESTIONS
 
     def decide(self, observation: dict[str, Any]) -> Decision:
         start = time.perf_counter()
-        result = self._agent.predict(observation, self.QUESTIONS)
+        questions = getattr(self, "_questions", self.QUESTIONS)
+        result = self._agent.predict(observation, questions)
         latency_ms = (time.perf_counter() - start) * 1000
         answers = result["answers"]
         action_answer = answers["action"]
@@ -116,6 +134,7 @@ class LayaController:
             details={
                 "action_scores": action_answer["probabilities"],
                 "answers": answers,
+                "runtime": "laya",
                 "usage": result["usage"],
             },
         )

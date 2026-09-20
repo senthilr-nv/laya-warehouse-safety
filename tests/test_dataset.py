@@ -1,53 +1,74 @@
-"""Tests for the synthetic warehouse policy dataset."""
+"""Tests for leak-free warehouse policy datasets."""
 
 from __future__ import annotations
 
 import unittest
-from collections import Counter
 
-from laya_warehouse.dataset import generate_cases
-from laya_warehouse.model import Action
+from laya_warehouse.dataset import dataset_summary, generate_cases
+from laya_warehouse.model import World
+from laya_warehouse.oracle import oracle_labels
 
 
 class DatasetTests(unittest.TestCase):
-    def test_dataset_is_balanced_and_deterministic(self) -> None:
-        first = generate_cases(per_action=3, seed=17)
-        second = generate_cases(per_action=3, seed=17)
+    def test_dataset_is_deterministic(self) -> None:
+        first = generate_cases(split="validation")
+        second = generate_cases(split="validation")
 
         self.assertEqual(first, second)
+        self.assertEqual(dataset_summary(first), dataset_summary(second))
+
+    def test_training_and_compositional_ood_families_are_disjoint(self) -> None:
+        train = generate_cases(split="train")
+        ood = generate_cases(split="ood_test")
+
         self.assertEqual(
-            Counter(case["label"] for case in first),
-            Counter({action.value: 3 for action in Action}),
+            {case["family"] for case in train},
+            {"stationary_pallet", "crossing_worker"},
+        )
+        self.assertEqual(
+            {case["family"] for case in ood},
+            {"combined_pallet_worker"},
+        )
+        self.assertTrue(
+            {case["scenario_id"] for case in train}.isdisjoint(
+                {case["scenario_id"] for case in ood}
+            )
         )
 
-    def test_wait_examples_describe_temporary_crossing_traffic(self) -> None:
-        cases = generate_cases(per_action=2, seed=5)
-        wait_states = [case["state"] for case in cases if case["label"] == Action.WAIT.value]
+    def test_observation_contains_no_policy_or_safety_answers(self) -> None:
+        cases = generate_cases(split="validation")
+        prohibited_keys = {
+            "answer",
+            "candidate_moves",
+            "label",
+            "oracle_action",
+            "path_blocked",
+            "risk",
+            "safe",
+            "safety",
+            "shield",
+            "unsafe",
+            "visible_hazards",
+        }
 
-        for state in wait_states:
-            self.assertFalse(state["candidate_moves"]["advance"]["safe"])
-            self.assertTrue(state["candidate_moves"]["wait"]["safe"])
-            self.assertIn(state["visible_hazards"][0]["kind"], ("worker", "forklift"))
-
-    def test_lateral_examples_avoid_a_stationary_pallet_and_align_with_goal(self) -> None:
-        cases = generate_cases(per_action=3, seed=9)
+        def assert_clean(value) -> None:
+            if isinstance(value, dict):
+                self.assertTrue(prohibited_keys.isdisjoint(value))
+                for child in value.values():
+                    assert_clean(child)
+            elif isinstance(value, list):
+                for child in value:
+                    assert_clean(child)
 
         for case in cases:
-            if case["label"] not in (Action.SHIFT_LEFT.value, Action.SHIFT_RIGHT.value):
-                continue
-            state = case["state"]
-            pallet = state["visible_hazards"][0]
-            self.assertEqual(pallet["kind"], "pallet")
-            self.assertEqual(pallet["relative_column"], 0)
-            self.assertEqual(pallet["motion"], "stationary")
-            if case["label"] == Action.SHIFT_LEFT.value:
-                self.assertGreaterEqual(
-                    state["robot"]["column"], max(state["goal"]["columns"])
-                )
-            else:
-                self.assertLessEqual(
-                    state["robot"]["column"], min(state["goal"]["columns"])
-                )
+            assert_clean(case["state"])
+            self.assertEqual(set(case["labels"]), {"action", "path_blocked"})
+
+    def test_labels_match_the_oracle_for_every_validation_state(self) -> None:
+        for case in generate_cases(split="validation"):
+            expected = oracle_labels(World.from_observation(case["state"]))
+            self.assertEqual(case["labels"]["action"], expected["action"])
+            self.assertEqual(case["labels"]["path_blocked"], expected["path_blocked"])
 
 
 if __name__ == "__main__":

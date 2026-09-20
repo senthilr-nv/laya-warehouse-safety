@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fine-tune Laya on balanced simulator-generated warehouse decisions."""
+"""Fine-tune Laya on frozen simulator-generated warehouse decisions."""
 
 from __future__ import annotations
 
@@ -27,8 +27,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", default="convaiinnovations/laya")
     parser.add_argument("--output", type=Path, default=Path("results/laya-warehouse-model"))
-    parser.add_argument("--per-action", type=int, default=128)
-    parser.add_argument("--eval-per-action", type=int, default=32)
+    parser.add_argument("--max-ticks", type=int, default=30)
     parser.add_argument("--epochs", type=int, default=3)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--encoder-lr", type=float, default=2.5e-5)
@@ -56,30 +55,58 @@ def load_checkpoint(model_id: str, device: torch.device):
 
 def make_items(cases: list[dict[str, Any]], tokenizer, cfg: dict[str, Any]) -> list[dict[str, Any]]:
     items = []
-    question = LayaController.QUESTIONS["action"]
-    actions = list(question["criteria"])
     for case in cases:
-        label = Action(case["label"]).value
-        ids, markers = build_sequence(
+        action_question = LayaController.BENCHMARK_QUESTIONS["action"]
+        actions = list(action_question["criteria"])
+        action_label = Action(case["labels"]["action"]).value
+        action_ids, action_markers = build_sequence(
             tokenizer,
             case["state"],
-            {"t": "choice", "ins": question["instructions"], "crit": question["criteria"]},
+            {
+                "t": "choice",
+                "ins": action_question["instructions"],
+                "crit": action_question["criteria"],
+            },
             cfg["max_len"],
             cfg["head_max_len"],
         )
-        if len(markers) != len(actions):
+        if len(action_markers) != len(actions):
             raise RuntimeError("action question did not produce one marker per choice")
-        target = [0.02] * len(actions)
-        target[actions.index(label)] = 0.94
+        action_target = [0.02] * len(actions)
+        action_target[actions.index(action_label)] = 0.94
         items.append(
             {
-                "ids": ids,
-                "markers": markers,
+                "ids": action_ids,
+                "markers": action_markers,
                 "qtype": QTYPES["choice"],
-                "target": target,
+                "target": action_target,
                 "case_id": case["id"],
-                "actions": actions,
-                "label": label,
+                "question_id": "action",
+                "options": actions,
+                "label": action_label,
+            }
+        )
+
+        blocked_question = LayaController.BENCHMARK_QUESTIONS["path_blocked"]
+        blocked_ids, blocked_markers = build_sequence(
+            tokenizer,
+            case["state"],
+            {"t": "noul", "ins": blocked_question["instructions"], "crit": {}},
+            cfg["max_len"],
+            cfg["head_max_len"],
+        )
+        if len(blocked_markers) != 2:
+            raise RuntimeError("path_blocked question did not produce two markers")
+        blocked = bool(case["labels"]["path_blocked"])
+        items.append(
+            {
+                "ids": blocked_ids,
+                "markers": blocked_markers,
+                "qtype": QTYPES["noul"],
+                "target": [0.02, 0.98] if blocked else [0.98, 0.02],
+                "case_id": case["id"],
+                "question_id": "path_blocked",
+                "label": blocked,
             }
         )
     return items
@@ -131,8 +158,12 @@ def evaluate(
     dtype: torch.dtype,
 ) -> dict[str, Any]:
     model.eval()
-    correct = 0
+    action_correct = 0
+    action_cases = 0
     per_label: dict[str, list[int]] = {action.value: [] for action in Action}
+    blocked_correct = 0
+    blocked_cases = 0
+    blocked_brier = 0.0
     for offset in range(0, len(items), batch_size):
         batch = move_batch(collate(items[offset : offset + batch_size], pad_id), device)
         with torch.autocast(device_type=device.type, dtype=dtype):
@@ -143,18 +174,38 @@ def evaluate(
                 batch["marker_mask"],
                 batch["qtype"],
             )
-        predictions = torch.argmax(logits.float(), dim=-1).cpu().tolist()
-        for meta, prediction_index in zip(batch["meta"], predictions):
-            prediction = meta["actions"][prediction_index]
-            is_correct = int(prediction == meta["label"])
-            correct += is_correct
-            per_label[meta["label"]].append(is_correct)
+        probabilities = torch.softmax(logits.float(), dim=-1).cpu().tolist()
+        for meta, item_probabilities in zip(batch["meta"], probabilities):
+            if meta["question_id"] == "action":
+                prediction_index = max(
+                    range(len(meta["options"])),
+                    key=lambda index: item_probabilities[index],
+                )
+                prediction = meta["options"][prediction_index]
+                is_correct = int(prediction == meta["label"])
+                action_correct += is_correct
+                action_cases += 1
+                per_label[meta["label"]].append(is_correct)
+            else:
+                probability_true = item_probabilities[1]
+                target = int(bool(meta["label"]))
+                blocked_correct += int((probability_true >= 0.5) == bool(target))
+                blocked_brier += (probability_true - target) ** 2
+                blocked_cases += 1
     return {
-        "accuracy": round(correct / len(items), 4),
-        "cases": len(items),
-        "per_label_accuracy": {
-            label: round(sum(values) / len(values), 4)
-            for label, values in sorted(per_label.items())
+        "action": {
+            "accuracy": round(action_correct / action_cases, 4),
+            "cases": action_cases,
+            "per_label_accuracy": {
+                label: round(sum(values) / len(values), 4)
+                for label, values in sorted(per_label.items())
+                if values
+            },
+        },
+        "path_blocked": {
+            "accuracy": round(blocked_correct / blocked_cases, 4),
+            "brier": round(blocked_brier / blocked_cases, 4),
+            "cases": blocked_cases,
         },
     }
 
@@ -220,6 +271,7 @@ def save_checkpoint(
     saved_cfg = dict(cfg)
     saved_cfg["fine_tuned"] = True
     saved_cfg["model_name"] = "laya-warehouse-policy"
+    saved_cfg["trained_questions"] = ["action", "path_blocked"]
     (output / "rl_agent_config.json").write_text(
         json.dumps(saved_cfg, indent=2) + "\n", encoding="utf-8"
     )
@@ -241,8 +293,8 @@ def main() -> int:
     torch.set_float32_matmul_precision("high")
     device = torch.device("cuda")
 
-    train_cases = generate_cases(per_action=args.per_action, seed=args.seed)
-    eval_cases = generate_cases(per_action=args.eval_per_action, seed=args.seed + 1)
+    train_cases = generate_cases(split="train", max_ticks=args.max_ticks)
+    eval_cases = generate_cases(split="validation", max_ticks=args.max_ticks)
     print("train dataset:", dataset_summary(train_cases), flush=True)
     print("evaluation dataset:", dataset_summary(eval_cases), flush=True)
 
@@ -281,7 +333,7 @@ def main() -> int:
     scaler = torch.amp.GradScaler("cuda", enabled=dtype == torch.float16)
     rng = random.Random(args.seed)
     epoch_metrics = []
-    best_accuracy = -1.0
+    best_score = -1.0
     best_epoch = 0
     best_state = None
     for epoch in range(1, args.epochs + 1):
@@ -307,8 +359,12 @@ def main() -> int:
         epoch_metric = {"epoch": epoch, "loss": round(loss, 5), "evaluation": evaluation}
         epoch_metrics.append(epoch_metric)
         print("epoch:", json.dumps(epoch_metric, sort_keys=True), flush=True)
-        if evaluation["accuracy"] > best_accuracy:
-            best_accuracy = evaluation["accuracy"]
+        score = (
+            evaluation["action"]["accuracy"]
+            + evaluation["path_blocked"]["accuracy"]
+        ) / 2
+        if score > best_score:
+            best_score = score
             best_epoch = epoch
             best_state = {
                 name: value.detach().half().cpu().clone()
@@ -327,7 +383,7 @@ def main() -> int:
         "baseline": baseline,
         "epochs": epoch_metrics,
         "best_epoch": best_epoch,
-        "best_accuracy": best_accuracy,
+        "best_validation_score": round(best_score, 4),
         "elapsed_seconds": round(time.time() - started, 2),
     }
     save_checkpoint(args.output, cfg=cfg, tokenizer=tokenizer, model=model, metrics=metrics)

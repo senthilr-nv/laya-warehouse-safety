@@ -6,6 +6,7 @@ from laya_warehouse.controllers import HeuristicController, RandomController
 from laya_warehouse.controllers import LayaController
 from laya_warehouse.model import Action, Actor, World
 from laya_warehouse.recording import run_episode, verify_record
+from laya_warehouse.scenarios import manifest_for_split
 
 
 class SimulationTests(unittest.TestCase):
@@ -48,6 +49,21 @@ class SimulationTests(unittest.TestCase):
         record = run_episode(RandomController(seed=7), max_ticks=25)
 
         verify_record(record)
+
+    def test_scenario_record_replay_rejects_tampered_evaluation(self) -> None:
+        scenario = manifest_for_split("iid_test")[0]
+        record = run_episode(
+            HeuristicController(),
+            scenario=scenario,
+            include_evaluation=True,
+        )
+        verify_record(record)
+        record["frames"][0]["evaluation"]["path_blocked"] = not record["frames"][0][
+            "evaluation"
+        ]["path_blocked"]
+
+        with self.assertRaisesRegex(ValueError, "evaluation does not match replay"):
+            verify_record(record)
 
     def test_laya_controller_uses_the_typed_action_choice(self) -> None:
         class FakeAgent:

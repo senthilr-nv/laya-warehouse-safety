@@ -1,93 +1,61 @@
-"""Deterministic synthetic training cases for the warehouse policy."""
+"""Leak-free typed-decision datasets generated from frozen scenario manifests."""
 
 from __future__ import annotations
 
 import json
-import random
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from .model import Action, Actor, World
+from .model import Action
+from .oracle import oracle_labels
+from .scenarios import manifest_digest, manifest_for_split
 
 
-def _advance_world(rng: random.Random, index: int) -> World:
-    robot_x = rng.choice((4, 5, 6))
-    robot_y = rng.randint(3, 8)
-    offset = rng.choice((-2, 2))
-    pallet_x = max(0, min(10, robot_x + offset))
-    pallet_y = max(0, robot_y - rng.choice((2, 3)))
-    return World(
-        robot_x=robot_x,
-        robot_y=robot_y,
-        tick=index,
-        actors=[Actor(f"pallet-{index}", "pallet", pallet_x, pallet_y, 0)],
-    )
+def generate_cases(*, split: str = "train", max_ticks: int = 30) -> list[dict[str, Any]]:
+    """Roll out the oracle and label raw observations for one frozen split."""
 
-
-def _lateral_world(action: Action, rng: random.Random, index: int) -> World:
-    if action is Action.SHIFT_LEFT:
-        robot_x = rng.randint(6, 8)
-    else:
-        robot_x = rng.randint(2, 4)
-    robot_y = rng.randint(4, 8)
-    pallet_y = robot_y - rng.choice((1, 2, 3))
-    return World(
-        robot_x=robot_x,
-        robot_y=robot_y,
-        tick=index,
-        actors=[Actor(f"pallet-{index}", "pallet", robot_x, pallet_y, 0)],
-    )
-
-
-def _wait_world(rng: random.Random, index: int) -> World:
-    robot_x = rng.randint(3, 7)
-    robot_y = rng.randint(2, 8)
-    approach_from_left = rng.choice((True, False))
-    actor_x = robot_x - 1 if approach_from_left else robot_x + 1
-    actor_dx = 1 if approach_from_left else -1
-    kind = rng.choice(("worker", "forklift"))
-    return World(
-        robot_x=robot_x,
-        robot_y=robot_y,
-        tick=index,
-        actors=[Actor(f"{kind}-{index}", kind, actor_x, robot_y - 1, actor_dx)],
-    )
-
-
-def generate_cases(*, per_action: int = 128, seed: int = 0) -> list[dict[str, Any]]:
-    """Generate balanced labeled observations without external data."""
-
-    if per_action < 1:
-        raise ValueError("per_action must be at least 1")
-
-    rng = random.Random(seed)
     cases: list[dict[str, Any]] = []
-    for action in Action:
-        for index in range(per_action):
-            case_index = len(cases)
-            if action is Action.ADVANCE:
-                world = _advance_world(rng, case_index)
-            elif action is Action.WAIT:
-                world = _wait_world(rng, case_index)
-            else:
-                world = _lateral_world(action, rng, case_index)
+    for scenario in manifest_for_split(split):
+        world = scenario.build_world()
+        while world.status == "running" and world.tick < max_ticks:
+            labels = oracle_labels(world)
             cases.append(
                 {
-                    "id": f"synthetic-{seed}-{action.value}-{index:04d}",
+                    "id": f"{scenario.scenario_id}-tick-{world.tick:03d}",
+                    "scenario_id": scenario.scenario_id,
+                    "family": scenario.family.value,
+                    "split": scenario.split,
                     "state": world.observe(),
-                    "label": action.value,
-                    "source": "deterministic simulator",
+                    "labels": {
+                        "action": labels["action"],
+                        "path_blocked": labels["path_blocked"],
+                    },
+                    "source": "frozen deterministic simulator manifest",
                 }
             )
-
-    rng.shuffle(cases)
+            world.step(Action(labels["action"]), safety_shield=False)
+        if world.status != "completed":
+            raise RuntimeError(f"oracle did not complete scenario {scenario.scenario_id}")
     return cases
 
 
 def dataset_summary(cases: list[dict[str, Any]]) -> dict[str, Any]:
-    counts = Counter(case["label"] for case in cases)
-    return {"cases": len(cases), "labels": dict(sorted(counts.items()))}
+    action_counts = Counter(case["labels"]["action"] for case in cases)
+    path_counts = Counter(str(case["labels"]["path_blocked"]).lower() for case in cases)
+    family_counts = Counter(case["family"] for case in cases)
+    splits = sorted({case["split"] for case in cases})
+    specs = tuple(spec for split in splits for spec in manifest_for_split(split))
+    return {
+        "cases": len(cases),
+        "splits": splits,
+        "families": dict(sorted(family_counts.items())),
+        "labels": {
+            "action": dict(sorted(action_counts.items())),
+            "path_blocked": dict(sorted(path_counts.items())),
+        },
+        "manifest_digest": manifest_digest(specs),
+    }
 
 
 def save_cases(cases: list[dict[str, Any]], path: Path) -> None:
@@ -96,4 +64,4 @@ def save_cases(cases: list[dict[str, Any]], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as output:
         for case in cases:
-            output.write(json.dumps(case, separators=(",", ":")) + "\n")
+            output.write(json.dumps(case, separators=(",", ":"), sort_keys=True) + "\n")
