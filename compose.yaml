@@ -1,0 +1,22 @@
+services:
+  simulation:
+    image: laya-warehouse-safety:local
+    build: .
+    gpus: all
+    shm_size: 1gb
+    volumes:
+      - laya-cache:/cache/huggingface
+      - ./results:/results
+    command:
+      - run
+      - --controller
+      - laya
+      - --device
+      - cuda
+      - --headless
+      - --output
+      - /results/laya-dgx.json
+
+volumes:
+  laya-cache:
+

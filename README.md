@@ -78,6 +78,19 @@ or a local checkpoint, and `--device` to select `cpu`, `cuda`, or `mps`.
 
 The recorder refuses to overwrite an existing result. Choose a new output path for each run.
 
+### DGX Spark container
+
+The container preserves NVIDIA's ARM64/Blackwell PyTorch build from the pinned NGC base image. It
+does not replace Torch with a PyPI wheel.
+
+```sh
+docker compose build simulation
+docker compose run --rm simulation
+```
+
+The first run downloads the Laya checkpoint into the `laya-cache` Docker volume and writes the
+episode to `results/laya-dgx.json`.
+
 ## Current milestone
 
 - Deterministic crossing scenario with workers and a forklift.
@@ -86,6 +99,7 @@ The recorder refuses to overwrite an existing result. Choose a new output path f
 - Safety shield that records every overridden action.
 - JSON recording and deterministic replay verification.
 - Optional Pygame visualization.
+- Pinned DGX Spark GPU container path.
 
 Planned work includes scenario files, real-time and delayed decision modes, probability overlays,
 benchmark summaries, and curated replay media.
