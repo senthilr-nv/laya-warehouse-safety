@@ -55,7 +55,7 @@ class World:
 
     width: int = 11
     height: int = 9
-    robot_x: int = 5
+    robot_x: int = 4
     robot_y: int = 8
     goal_columns: tuple[int, ...] = (4, 5, 6)
     actors: list[Actor] = field(default_factory=list)
@@ -68,7 +68,7 @@ class World:
             actors=[
                 Actor("worker-a", "worker", 1, 6, 1),
                 Actor("forklift-a", "forklift", 9, 4, -1),
-                Actor("pallet-a", "pallet", 5, 3, 0),
+                Actor("pallet-a", "pallet", 4, 3, 0),
                 Actor("worker-b", "worker", 2, 2, 1),
             ]
         )

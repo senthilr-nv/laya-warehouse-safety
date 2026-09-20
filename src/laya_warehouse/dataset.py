@@ -27,11 +27,11 @@ def _advance_world(rng: random.Random, index: int) -> World:
 
 def _lateral_world(action: Action, rng: random.Random, index: int) -> World:
     if action is Action.SHIFT_LEFT:
-        robot_x = rng.randint(7, 8)
+        robot_x = rng.randint(6, 8)
     else:
-        robot_x = rng.randint(2, 3)
+        robot_x = rng.randint(2, 4)
     robot_y = rng.randint(4, 8)
-    pallet_y = robot_y - rng.choice((2, 3))
+    pallet_y = robot_y - rng.choice((1, 2, 3))
     return World(
         robot_x=robot_x,
         robot_y=robot_y,

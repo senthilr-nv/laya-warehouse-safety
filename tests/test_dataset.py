@@ -41,9 +41,13 @@ class DatasetTests(unittest.TestCase):
             self.assertEqual(pallet["relative_column"], 0)
             self.assertEqual(pallet["motion"], "stationary")
             if case["label"] == Action.SHIFT_LEFT.value:
-                self.assertGreater(state["robot"]["column"], max(state["goal"]["columns"]))
+                self.assertGreaterEqual(
+                    state["robot"]["column"], max(state["goal"]["columns"])
+                )
             else:
-                self.assertLess(state["robot"]["column"], min(state["goal"]["columns"]))
+                self.assertLessEqual(
+                    state["robot"]["column"], min(state["goal"]["columns"])
+                )
 
 
 if __name__ == "__main__":
